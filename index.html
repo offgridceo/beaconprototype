@@ -26,6 +26,7 @@
       --radius-lg: 20px;
       --radius-full: 9999px;
       --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     * {
@@ -131,7 +132,7 @@
       padding: 5px 12px;
       border-radius: var(--radius-full);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: var(--transition-smooth);
     }
 
     .toggle-btn.active {
@@ -145,6 +146,7 @@
       overflow-x: auto;
       padding: 0 16px;
       scrollbar-width: none;
+      transition: var(--transition-smooth);
     }
     .story-scroll-container::-webkit-scrollbar { display: none; }
 
@@ -155,7 +157,9 @@
       gap: 6px;
       cursor: pointer;
       flex-shrink: 0;
+      transition: transform 0.2s ease;
     }
+    .story-avatar-item:active { transform: scale(0.95); }
 
     .avatar-ring {
       width: 58px;
@@ -209,11 +213,11 @@
       font-size: 0.85rem;
       cursor: pointer;
       flex-shrink: 0;
-      transition: background 0.2s;
+      transition: var(--transition-smooth);
     }
-    .more-stories-btn:hover { background: rgba(99, 102, 241, 0.15); }
+    .more-stories-btn:hover { background: rgba(99, 102, 241, 0.15); transform: scale(1.05); }
 
-    /* STORY DRAWER (EXPANDED) */
+    /* STORY DRAWER (EXPANDED SMOOTH SLIDE) */
     .story-drawer {
       position: absolute;
       top: 0;
@@ -223,15 +227,16 @@
       z-index: 50;
       border-bottom: 2px solid var(--accent-primary);
       padding: 16px;
-      display: none;
-      animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0.3s;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    .story-drawer.open { display: block; }
-
-    @keyframes slideDown {
-      from { transform: translateY(-100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    .story-drawer.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
 
     .drawer-header {
@@ -250,7 +255,9 @@
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
+      transition: var(--transition-smooth);
     }
+    .close-drawer-btn:active { transform: scale(0.96); }
 
     .drawer-footer {
       display: flex;
@@ -283,11 +290,19 @@
       inset: 0;
       background: #000;
       z-index: 100;
-      display: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
-    .story-viewer-modal.active { display: flex; }
+    .story-viewer-modal.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
 
     .story-progress-bar {
       display: flex;
@@ -377,6 +392,7 @@
       align-items: center;
       z-index: 30;
       backdrop-filter: blur(8px);
+      transition: var(--transition-smooth);
     }
 
     /* DISCOVER TABS */
@@ -386,6 +402,7 @@
       padding: 12px 16px;
       background: var(--bg-dark);
       border-bottom: 1px solid var(--border-color);
+      transition: var(--transition-smooth);
     }
 
     .disc-tab-btn {
@@ -397,6 +414,7 @@
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
+      transition: var(--transition-smooth);
     }
 
     .disc-tab-btn.active {
@@ -405,12 +423,20 @@
       border-color: var(--accent-primary);
     }
 
-    /* FEED POSTS & STORYBOARDS */
+    /* FEED POSTS & SMOOTH PAGE TRANSITIONS */
     .feed-container {
       display: flex;
       flex-direction: column;
       gap: 16px;
       padding: 16px;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .feed-container.fade-out {
+      opacity: 0;
+      transform: translateY(8px);
     }
 
     .post-card {
@@ -418,7 +444,9 @@
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
       overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
+    .post-card:hover { border-color: rgba(99, 102, 241, 0.3); }
 
     .post-header {
       display: flex;
@@ -472,12 +500,18 @@
     .slide-item {
       position: absolute;
       inset: 0;
-      display: none;
+      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s;
     }
-    .slide-item.active { display: flex; }
+    .slide-item.active {
+      opacity: 1;
+      visibility: visible;
+    }
 
     .slide-text-card {
       width: 100%;
@@ -536,7 +570,9 @@
       align-items: center;
       gap: 8px;
       box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+      transition: var(--transition-smooth);
     }
+    .vista-btn:active { transform: scale(0.96); }
 
     .storyboard-nav-dots {
       position: absolute;
@@ -553,6 +589,7 @@
       flex: 1;
       background: rgba(255,255,255,0.3);
       border-radius: 2px;
+      transition: background 0.25s ease;
     }
     .dot-step.active { background: #fff; }
 
@@ -572,7 +609,9 @@
       align-items: center;
       justify-content: center;
       backdrop-filter: blur(4px);
+      transition: var(--transition-smooth);
     }
+    .sb-btn-left:active, .sb-btn-right:active { transform: translateY(-50%) scale(0.9); }
     .sb-btn-left { left: 10px; }
     .sb-btn-right { right: 10px; }
 
@@ -597,7 +636,9 @@
       align-items: center;
       gap: 6px;
       font-family: inherit;
+      transition: transform 0.15s ease;
     }
+    .action-icon-btn:active { transform: scale(0.9); }
 
     .action-icon-btn span {
       font-size: 0.8rem;
@@ -633,15 +674,30 @@
       font-size: 1.5rem;
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.4);
+      transition: transform 0.2s ease;
     }
+    .video-card-preview:hover .video-play-badge { transform: scale(1.1); }
 
-    /* PROFILE LAYOUT STYLES */
+    /* PROFILE LAYOUT STYLES & FADE TRANSITION */
     .profile-container {
-      display: none;
+      display: flex;
       flex-direction: column;
       background: var(--bg-dark);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      position: absolute;
+      width: 100%;
+      pointer-events: none;
     }
-    .profile-container.active { display: flex; }
+    .profile-container.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      position: relative;
+      pointer-events: auto;
+    }
 
     .profile-header-card {
       display: flex;
@@ -661,9 +717,9 @@
       background: var(--accent-gradient);
       cursor: pointer;
       margin-bottom: 12px;
-      transition: transform 0.2s ease;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .profile-hero-avatar:hover { transform: scale(1.03); }
+    .profile-hero-avatar:hover { transform: scale(1.05); }
 
     .profile-hero-img {
       width: 100%;
@@ -737,8 +793,9 @@
       font-weight: 700;
       font-size: 0.85rem;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: var(--transition-smooth);
     }
+    .btn-follow:active { transform: scale(0.96); }
     .btn-follow.following { background: var(--surface-elevated); border: 1px solid var(--border-color); color: var(--text-main); }
 
     .btn-sparks {
@@ -755,7 +812,9 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
+      transition: var(--transition-smooth);
     }
+    .btn-sparks:active { transform: scale(0.96); }
 
     .btn-msg-request {
       width: 42px;
@@ -769,7 +828,9 @@
       justify-content: center;
       cursor: pointer;
       font-size: 1.1rem;
+      transition: var(--transition-smooth);
     }
+    .btn-msg-request:active { transform: scale(0.92); }
 
     .profile-bio {
       font-size: 0.85rem;
@@ -802,6 +863,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
+      transition: var(--transition-smooth);
     }
 
     .prof-tab-btn.active {
@@ -828,20 +890,31 @@
       font-size: 2.2rem;
       padding: 12px;
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
+    .sticker-item:hover { transform: scale(1.05); }
     .sticker-name { font-size: 0.68rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
 
+    /* MODAL FADE-IN & SCALE TRANSITIONS */
     .avatar-expansion-modal {
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.92);
       z-index: 150;
-      display: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      display: flex;
       flex-direction: column;
       justify-content: space-between;
       backdrop-filter: blur(12px);
     }
-    .avatar-expansion-modal.active { display: flex; }
+    .avatar-expansion-modal.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
 
     .avatar-expanded-img {
       max-width: 90%;
@@ -849,6 +922,7 @@
       object-fit: contain;
       border-radius: var(--radius-lg);
       margin: auto;
+      transition: var(--transition-smooth);
     }
 
     .msg-request-modal {
@@ -856,12 +930,18 @@
       inset: 0;
       background: rgba(0,0,0,0.8);
       z-index: 150;
-      display: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s;
+      display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-    .msg-request-modal.active { display: flex; }
+    .msg-request-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
 
     .request-box {
       width: 100%;
@@ -873,6 +953,11 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      transform: scale(0.92);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .msg-request-modal.active .request-box {
+      transform: scale(1);
     }
 
     /* FOOTER / NAVIGATION */
@@ -904,8 +989,9 @@
       font-weight: 600;
       cursor: pointer;
       width: 33%;
+      transition: var(--transition-smooth);
     }
-
+    .nav-item:active { transform: scale(0.92); }
     .nav-item.active { color: var(--accent-primary); }
 
     .nav-item svg {
@@ -949,6 +1035,7 @@
         cursor: pointer;
         width: 100%;
         text-align: left;
+        transition: var(--transition-smooth);
       }
 
       .desktop-nav-btn.active {
@@ -980,12 +1067,18 @@
       inset: 0;
       background: rgba(0,0,0,0.95);
       z-index: 120;
-      display: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s;
+      display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-    .vista-modal.active { display: flex; }
+    .vista-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
 
     .vista-player-box {
       width: 100%;
@@ -994,6 +1087,11 @@
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
       overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .vista-modal.active .vista-player-box {
+      transform: scale(1);
     }
 
     .scroll-loader-spinner {
@@ -1002,6 +1100,7 @@
       font-size: 0.8rem;
       color: var(--text-muted);
       font-weight: 600;
+      transition: opacity 0.2s ease;
     }
   </style>
 </head>
@@ -1067,9 +1166,7 @@
           </div>
         </div>
 
-        <div id="drawer-content-area">
-          <!-- Dynamic rendering based on Creator vs Timeline view modes -->
-        </div>
+        <div id="drawer-content-area"></div>
 
         <div class="drawer-footer">
           <button class="close-drawer-btn" onclick="toggleStoryDrawer(false)">Close ✕</button>
@@ -1086,7 +1183,7 @@
 
     <!-- HOME / DISCOVER MAIN CONTENT FEED -->
     <section class="feed-container" id="feed-container"></section>
-    <div class="scroll-loader-spinner" id="infinite-scroll-indicator">Loading more posts...</div>
+    <div class="scroll-loader-spinner" id="infinite-scroll-indicator" style="display: none;">Loading more posts...</div>
 
     <!-- DYNAMIC USER PROFILE CONTAINER -->
     <section class="profile-container" id="profile-view">
@@ -1434,7 +1531,6 @@
           </div>
         `;
       } else {
-        /* CHRONOLOGICAL TIMELINE MODE */
         container.innerHTML = `
           <div class="drawer-section-label">Chronological Event Timeline</div>
           <div class="drawer-scroll-row" style="padding-top: 6px;">
@@ -1721,7 +1817,7 @@
       closeAvatarExpansion();
     }
 
-    /* ================= MAIN TAB ROUTER ================= */
+    /* ================= MAIN TAB ROUTER WITH SMOOTH TRANSITION ================= */
     function switchMainTab(tab) {
       const navHome = document.getElementById('nav-home');
       const navDisc = document.getElementById('nav-discover');
@@ -1740,38 +1836,44 @@
       [navHome, navDisc, navProf].forEach(n => n && n.classList.remove('active'));
       [deskNavHome, deskNavDisc, deskNavProf].forEach(n => n && n.classList.remove('active'));
 
-      if(tab === 'home') {
-        navHome.classList.add('active');
-        if(deskNavHome) deskNavHome.classList.add('active');
+      mainFeed.classList.add('fade-out');
 
-        mainFeed.style.display = 'flex';
-        profView.classList.remove('active');
-        storyDock.style.display = 'block';
-        discSubtabs.style.display = 'none';
-        scrollIndicator.style.display = 'none';
-        discLabels.forEach(lbl => lbl.style.display = 'none');
-        showAllPosts();
-      } else if(tab === 'discover') {
-        navDisc.classList.add('active');
-        if(deskNavDisc) deskNavDisc.classList.add('active');
+      setTimeout(() => {
+        if(tab === 'home') {
+          navHome.classList.add('active');
+          if(deskNavHome) deskNavHome.classList.add('active');
 
-        mainFeed.style.display = 'flex';
-        profView.classList.remove('active');
-        storyDock.style.display = 'block';
-        discSubtabs.style.display = 'flex';
-        scrollIndicator.style.display = 'none';
-        discLabels.forEach(lbl => lbl.style.display = 'inline-block');
-        filterDiscover('trending', document.querySelector('.disc-tab-btn'));
-      } else if(tab === 'profile') {
-        navProf.classList.add('active');
-        if(deskNavProf) deskNavProf.classList.add('active');
+          mainFeed.style.display = 'flex';
+          profView.classList.remove('active');
+          storyDock.style.display = 'block';
+          discSubtabs.style.display = 'none';
+          scrollIndicator.style.display = 'none';
+          discLabels.forEach(lbl => lbl.style.display = 'none');
+          showAllPosts();
+        } else if(tab === 'discover') {
+          navDisc.classList.add('active');
+          if(deskNavDisc) deskNavDisc.classList.add('active');
 
-        mainFeed.style.display = 'none';
-        storyDock.style.display = 'none';
-        discSubtabs.style.display = 'none';
-        scrollIndicator.style.display = 'none';
-        profView.classList.add('active');
-      }
+          mainFeed.style.display = 'flex';
+          profView.classList.remove('active');
+          storyDock.style.display = 'block';
+          discSubtabs.style.display = 'flex';
+          scrollIndicator.style.display = 'none';
+          discLabels.forEach(lbl => lbl.style.display = 'inline-block');
+          filterDiscover('trending', document.querySelector('.disc-tab-btn'));
+        } else if(tab === 'profile') {
+          navProf.classList.add('active');
+          if(deskNavProf) deskNavProf.classList.add('active');
+
+          mainFeed.style.display = 'none';
+          storyDock.style.display = 'none';
+          discSubtabs.style.display = 'none';
+          scrollIndicator.style.display = 'none';
+          profView.classList.add('active');
+        }
+        
+        mainFeed.classList.remove('fade-out');
+      }, 120);
     }
 
     function filterDiscover(category, btn) {
