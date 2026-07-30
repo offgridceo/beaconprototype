@@ -1151,12 +1151,12 @@
     }
     .menu-drawer-modal.active .menu-content-box { transform: translateY(0); }
 
-    /* FIXED MODALS ISOLATION */
+    /* FIXED MODALS ISOLATION WITH STRICT Z-INDEX STACKING */
     .msg-request-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 150;
+      background: rgba(0,0,0,0.85);
+      z-index: 250;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.25s ease, visibility 0.25s;
@@ -1276,8 +1276,8 @@
 
         <div class="profile-action-row">
           <button class="btn-follow" id="prof-follow-btn" onclick="toggleFollow(this)">Follow</button>
-          <button class="btn-sparks" onclick="openSparksModal()">⚡ Send Sparks</button>
-          <button class="btn-msg-request" title="Send Direct Message Request" onclick="openMsgRequestModal()">📩</button>
+          <button class="btn-sparks" id="prof-sparks-btn" onclick="openSparksModal()">⚡ Send Sparks</button>
+          <button class="btn-msg-request" id="prof-msg-btn" title="Send Direct Message Request" onclick="openMsgRequestModal()">📩</button>
         </div>
 
         <p class="profile-bio" id="prof-bio">---</p>
@@ -1388,8 +1388,8 @@
       <p style="font-size: 0.8rem; color: var(--text-muted);">Support creator directly via decentralized LibreNet currency.</p>
       <div style="display: flex; gap: 10px; margin: 10px 0;">
         <button class="btn-sparks" style="flex:1;" onclick="sendSparks(10)">10 ⚡</button>
-        <button class="btn-sparks" style="flex:1;" onclick="sendSparks(50)">50 ⚡</button>
-        <button class="btn-sparks" style="flex:1;" onclick="sendSparks(100)">100 ⚡</button>
+        <button class="btn-sparks" style="flex:1;" onclick="sendSparks(15)">15 ⚡</button>
+        <button class="btn-sparks" style="flex:1;" onclick="sendSparks(20)">20 ⚡</button>
       </div>
       <button class="close-drawer-btn" onclick="closeSparksModal()">Cancel</button>
     </div>
@@ -1416,9 +1416,9 @@
     };
 
     let activeProfileHandle = '@tecuani';
-    const slideState = {}; // Track storyboard slides active index
+    const slideState = {};
 
-    /* 20 UNIQUE HOME FEED POSTS (ACCOUNTS YOU FOLLOW) */
+    /* 20 UNIQUE HOME FEED POSTS */
     const homeFeedPosts = [
       { id: 101, type: 'storyboard', category: 'trending', user: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', time: '10 mins ago', caption: 'Deep dive into the 7-track mixtape architecture.', likes: '1.2K', comments: '142', shares: '89', saves: '310', slides: [{ type: 'text', content: 'Contrapeso Mixtape breakdown 🎧', bg: '#4f46e5' }, { type: 'text', content: 'Track 1: Direct output freestyle.', bg: '#7c3aed' }, { type: 'image', url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=80', caption: 'Analog rack configuration.' }, { type: 'text', content: 'No punch-ins. Pure written bars.', bg: '#059669' }] },
       { id: 102, type: 'photo', category: 'rising', user: '@kenji_explores', avatar: 'https://picsum.photos/seed/tokyo/100', time: '25 mins ago', caption: 'Late night alleyways in Shibuya.', imageUrl: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800&q=80', likes: '2.4K', comments: '88', shares: '120', saves: '540' },
@@ -1442,7 +1442,7 @@
       { id: 120, type: 'text', category: 'trending', user: '@philosophy_now', avatar: 'https://picsum.photos/seed/think/100', time: '18 hrs ago', text: 'Freedom of speech is meaningless if platforms enforce invisible algorithmic shadowbans.', likes: '7.2K', comments: '690', shares: '1.8K', saves: '2.1K' }
     ];
 
-    /* 20 UNIQUE DISCOVER FEED POSTS (ACCOUNTS YOU DON'T FOLLOW + FOLLOW BUTTON) */
+    /* 20 UNIQUE DISCOVER FEED POSTS */
     const discoverFeedPosts = [
       { id: 201, type: 'text', category: 'trending', user: '@crypto_leak', avatar: 'https://picsum.photos/seed/leak/100', time: '5 mins ago', text: 'Zero-knowledge proofs are fundamentally changing digital identity privacy forever.', likes: '4.2K', comments: '310', shares: '540', saves: '890' },
       { id: 202, type: 'photo', category: 'rising', user: '@sahara_lens', avatar: 'https://picsum.photos/seed/desert/100', time: '18 mins ago', caption: 'Dunes under full moon in Morocco.', imageUrl: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&q=80', likes: '6.8K', comments: '142', shares: '310', saves: '950' },
@@ -1466,7 +1466,7 @@
       { id: 220, type: 'text', category: 'rising', user: '@free_thought', avatar: 'https://picsum.photos/seed/free/100', time: '9 hrs ago', text: 'You do not truly own your digital media unless you hold the private keys and direct file downloads.', likes: '9.8K', comments: '810', shares: '2.4K', saves: '3.1K' }
     ];
 
-    /* REALISTIC COMMENT THREAD DATABASE */
+    /* REALISTIC COMMENT THREADS */
     const realisticComments = [
       [ { user: '@bob', avatar: 'https://picsum.photos/seed/bob/100', text: 'This shit is insanely clean bro. Production level crazy 🔥' }, { user: '@mia', avatar: 'https://picsum.photos/seed/mia/100', text: 'Finally a platform where posts don’t feel algorithm forced.' }, { user: '@dave_99', avatar: 'https://picsum.photos/seed/dave/100', text: 'Real talk, this mix hits different on proper speakers.' } ],
       [ { user: '@alex_k', avatar: 'https://picsum.photos/seed/alex/100', text: 'Nah fr though, people underestimate how big open hardware is gonna be.' }, { user: '@sara', avatar: 'https://picsum.photos/seed/sara/100', text: 'Facts. Proprietary lock-in is dying out fast.' } ],
@@ -1474,7 +1474,7 @@
       [ { user: '@sam_t', avatar: 'https://picsum.photos/seed/sam/100', text: 'People keep sleeping on this topic smh.' }, { user: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', text: 'They’ll wake up when central systems drop out again 🤷‍♂️' } ]
     ];
 
-    /* 20 STORY ACCOUNTS FOR DOCK & 9:16 VIEWER */
+    /* STORY ACCOUNTS */
     const storyAccounts = [
       { user: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', category: 'new', time: '10m ago', text: 'In the studio cooking track 4 beat snippet 🎙️' },
       { user: '@kenji_explores', avatar: 'https://picsum.photos/seed/tokyo/100', category: 'new', time: '25m ago', text: 'Shinjuku neon reflections 🌧️📷' },
@@ -1602,7 +1602,7 @@
 
       storyTimer = setTimeout(() => {
         storyNavigate(1);
-      }, 15000); // 15 SECONDS DURATION
+      }, 15000);
     }
 
     function storyNavigate(direction) {
@@ -1762,7 +1762,7 @@
       });
     }
 
-    /* FULLSCREEN POST THREAD MODAL WITH DYNAMIC COMMENTS */
+    /* FULLSCREEN POST THREAD MODAL */
     function openFullscreenPost(post, isDiscover = false) {
       const modal = document.getElementById('fullscreen-post-modal');
       const body = document.getElementById('full-post-content-body');
@@ -1777,7 +1777,6 @@
 
       body.appendChild(card);
 
-      /* RENDER REALISTIC COMMENTS */
       const commentThread = realisticComments[post.id % realisticComments.length];
       let commentsHtml = `<h4 style="font-size: 0.9rem; color: var(--text-muted);">Conversations (${commentThread.length})</h4>`;
       commentThread.forEach(c => {
@@ -1800,7 +1799,7 @@
       document.getElementById('fullscreen-post-modal').classList.remove('active');
     }
 
-    /* PROFILE ROUTER WITH SCROLL RESET */
+    /* PROFILE ROUTER & CLICK HANDLERS FIX */
     function openUserProfile(handle) {
       activeProfileHandle = handle;
       const data = profilesDB[handle] || { name: handle.replace('@', ''), handle: handle, avatar: `https://picsum.photos/seed/${handle}/200`, posts: '12', followers: '1.1K', following: '98', bio: 'Independent creator on Beacon LibreNet.' };
@@ -1814,10 +1813,31 @@
       document.getElementById('prof-bio').innerText = data.bio;
 
       const isOwnProfile = (handle === '@tecuani');
+      const followBtn = document.getElementById('prof-follow-btn');
+      
+      /* HIDE FOLLOW BUTTON ON OWN PROFILE, SHOW ON RANDOM PROFILES */
+      if(isOwnProfile) {
+        followBtn.style.display = 'none';
+      } else {
+        followBtn.style.display = 'inline-block';
+        followBtn.innerText = 'Follow';
+        followBtn.style.background = 'var(--accent-primary)';
+      }
+
       updateOwnProfileControls(isOwnProfile);
 
       switchMainTab('profile');
       switchProfileTab('posts', document.querySelector('.prof-tab-btn'));
+    }
+
+    function toggleFollow(btn) {
+      if(btn.innerText === 'Follow') {
+        btn.innerText = 'Following';
+        btn.style.background = 'var(--surface-elevated)';
+      } else {
+        btn.innerText = 'Follow';
+        btn.style.background = 'var(--accent-primary)';
+      }
     }
 
     function updateOwnProfileControls(show) {
@@ -1840,17 +1860,25 @@
       }
     }
 
+    /* PROFILE SUB-TABS INTERACTION FIX */
     function switchProfileTab(tab, btn) {
       document.querySelectorAll('.prof-tab-btn').forEach(b => b.classList.remove('active'));
       if(btn) btn.classList.add('active');
 
       const userPosts = [...homeFeedPosts, ...discoverFeedPosts].filter(p => p.user === activeProfileHandle);
 
-      if(tab === 'posts') renderFeed(userPosts.length ? userPosts : homeFeedPosts.slice(0,3), 'profile-feed-container');
-      else if(tab === 'shorts') renderFeed(userPosts.filter(p => p.type === 'short'), 'profile-feed-container');
-      else if(tab === 'audio') renderFeed(userPosts.filter(p => p.type === 'audio'), 'profile-feed-container');
-      else if(tab === 'stickers') {
-        document.getElementById('profile-feed-container').innerHTML = `<div class="stickers-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; padding:16px;"><div class="sticker-item" style="background:var(--card-bg); padding:20px; text-align:center; border-radius:12px;">⚡<br><span style="font-size:0.7rem;">Spark</span></div></div>`;
+      if(tab === 'posts') {
+        renderFeed(userPosts.length ? userPosts : homeFeedPosts.slice(0,3), 'profile-feed-container');
+      } else if(tab === 'shorts') {
+        renderFeed(userPosts.filter(p => p.type === 'short'), 'profile-feed-container');
+      } else if(tab === 'audio') {
+        renderFeed(userPosts.filter(p => p.type === 'audio'), 'profile-feed-container');
+      } else if(tab === 'stickers') {
+        document.getElementById('profile-feed-container').innerHTML = `
+          <div class="stickers-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; padding:16px;">
+            <div class="sticker-item" style="background:var(--card-bg); padding:20px; text-align:center; border-radius:12px; border:1px solid var(--border-color);">⚡<br><span style="font-size:0.7rem;">Spark Badge</span></div>
+            <div class="sticker-item" style="background:var(--card-bg); padding:20px; text-align:center; border-radius:12px; border:1px solid var(--border-color);">🔥<br><span style="font-size:0.7rem;">Mixtape Drop</span></div>
+          </div>`;
       }
     }
 
@@ -1864,17 +1892,27 @@
       toggleCreateMenu();
     }
 
-    /* MODAL HANDLERS */
+    /* MODAL POPUPS FIX */
     function openMenuDrawer() { document.getElementById('menu-drawer-modal').classList.add('active'); }
     function closeMenuDrawer() { document.getElementById('menu-drawer-modal').classList.remove('active'); }
+    
     function openSparksModal() { document.getElementById('sparks-modal').classList.add('active'); }
     function closeSparksModal() { document.getElementById('sparks-modal').classList.remove('active'); }
+    function sendSparks(amt) {
+      alert(`Successfully sent ${amt} Sparks to ${activeProfileHandle}!`);
+      closeSparksModal();
+    }
+
     function openMsgRequestModal() { document.getElementById('msg-request-modal').classList.add('active'); }
     function closeMsgRequestModal() { document.getElementById('msg-request-modal').classList.remove('active'); }
+    function submitMsgRequest() {
+      alert(`Direct Message request submitted to ${activeProfileHandle}.`);
+      closeMsgRequestModal();
+    }
 
     /* MAIN TAB SWITCHING WITH STRICT SCROLL RESET */
     function switchMainTab(tab) {
-      window.scrollTo(0, 0); // RESET PAGE SCROLL TO TOP ALWAYS
+      window.scrollTo(0, 0);
 
       const navHome = document.getElementById('nav-home');
       const navDisc = document.getElementById('nav-discover');
