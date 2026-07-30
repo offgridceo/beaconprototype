@@ -114,13 +114,6 @@
       position: relative;
     }
 
-    .dock-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 16px 10px 16px;
-    }
-
     .view-mode-toggle {
       display: flex;
       background-color: var(--bg-dark);
@@ -258,24 +251,27 @@
 
     .drawer-header {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       margin-bottom: 16px;
     }
 
-    .drawer-title {
-      font-size: 1rem;
-      font-weight: 700;
-    }
-
     .close-drawer-btn {
       background: var(--surface-elevated);
-      border: none;
+      border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 6px 12px;
+      padding: 8px 20px;
       border-radius: var(--radius-full);
       font-size: 0.8rem;
+      font-weight: 600;
       cursor: pointer;
+    }
+
+    .drawer-footer {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+      padding-top: 8px;
     }
 
     .drawer-section-label {
@@ -287,12 +283,15 @@
       font-weight: 700;
     }
 
-    .drawer-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 12px;
+    /* Horizontal scroll for drawer categories */
+    .drawer-scroll-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
     }
+    .drawer-scroll-row::-webkit-scrollbar { display: none; }
 
     /* STORY VIEWER OVERLAY */
     .story-viewer-modal {
@@ -666,7 +665,11 @@
     .nav-item svg {
       width: 22px;
       height: 22px;
-      fill: currentColor;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     /* DESKTOP SPECIFIC EXTENSIONS */
@@ -759,11 +762,11 @@
       BEACON <span class="badge-librenet">LibreNet</span>
     </div>
     <nav style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;">
-      <button class="desktop-nav-btn active" onclick="switchMainTab('home')">
+      <button class="desktop-nav-btn active" id="desk-nav-home" onclick="switchMainTab('home')">
         🏠 Home
       </button>
-      <button class="desktop-nav-btn" onclick="switchMainTab('discover')">
-        🔥 Discover
+      <button class="desktop-nav-btn" id="desk-nav-discover" onclick="switchMainTab('discover')">
+        🧭 Discover
       </button>
       <button class="desktop-nav-btn" style="opacity: 0.5; cursor: not-allowed;">
         👤 Profile (Next)
@@ -786,16 +789,6 @@
 
     <!-- STORY DOCK -->
     <section class="story-dock-wrapper">
-      <div class="dock-header">
-        <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Stories</span>
-        
-        <!-- Creator vs Timeline Mode Toggle -->
-        <div class="view-mode-toggle">
-          <button class="toggle-btn active" id="btn-mode-creator" onclick="setStoryMode('creator')">Creator</button>
-          <button class="toggle-btn" id="btn-mode-timeline" onclick="setStoryMode('timeline')">Timeline</button>
-        </div>
-      </div>
-
       <!-- Scrollable Row (Creator Mode Default) -->
       <div class="story-scroll-container" id="story-row-creator">
         <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0)">
@@ -846,12 +839,15 @@
       <!-- EXPANDABLE STORY DRAWER (+37) -->
       <div class="story-drawer" id="story-drawer">
         <div class="drawer-header">
-          <span class="drawer-title">All Unwatched Stories</span>
-          <button class="close-drawer-btn" onclick="toggleStoryDrawer(false)">Close ✕</button>
+          <!-- Creator vs Timeline Mode Toggle (Inside Drawer) -->
+          <div class="view-mode-toggle">
+            <button class="toggle-btn active" id="btn-mode-creator" onclick="setStoryMode('creator')">Creator</button>
+            <button class="toggle-btn" id="btn-mode-timeline" onclick="setStoryMode('timeline')">Timeline</button>
+          </div>
         </div>
 
         <div class="drawer-section-label">New Today</div>
-        <div class="drawer-grid">
+        <div class="drawer-scroll-row">
           <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0); toggleStoryDrawer(false);">
             <div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img"></div>
             <span class="story-username">Alice</span>
@@ -864,10 +860,18 @@
             <div class="avatar-ring"><img src="https://picsum.photos/seed/mia/100" class="avatar-img"></div>
             <span class="story-username">Mia</span>
           </div>
+          <div class="story-avatar-item" onclick="openStoryViewer('Leo', 0); toggleStoryDrawer(false);">
+            <div class="avatar-ring"><img src="https://picsum.photos/seed/leo/100" class="avatar-img"></div>
+            <span class="story-username">Leo</span>
+          </div>
+          <div class="story-avatar-item" onclick="openStoryViewer('Sofia', 0); toggleStoryDrawer(false);">
+            <div class="avatar-ring"><img src="https://picsum.photos/seed/sofia/100" class="avatar-img"></div>
+            <span class="story-username">Sofia</span>
+          </div>
         </div>
 
         <div class="drawer-section-label">Earlier Today</div>
-        <div class="drawer-grid">
+        <div class="drawer-scroll-row">
           <div class="story-avatar-item" onclick="openStoryViewer('Carlos', 0); toggleStoryDrawer(false);">
             <div class="avatar-ring"><img src="https://picsum.photos/seed/carlos/100" class="avatar-img"></div>
             <span class="story-username">Carlos</span>
@@ -876,10 +880,14 @@
             <div class="avatar-ring"><img src="https://picsum.photos/seed/emma/100" class="avatar-img"></div>
             <span class="story-username">Emma</span>
           </div>
+          <div class="story-avatar-item" onclick="openStoryViewer('David', 0); toggleStoryDrawer(false);">
+            <div class="avatar-ring"><img src="https://picsum.photos/seed/david/100" class="avatar-img"></div>
+            <span class="story-username">David</span>
+          </div>
         </div>
 
         <div class="drawer-section-label">Yesterday</div>
-        <div class="drawer-grid">
+        <div class="drawer-scroll-row">
           <div class="story-avatar-item" onclick="openStoryViewer('Noah', 0); toggleStoryDrawer(false);">
             <div class="avatar-ring seen"><img src="https://picsum.photos/seed/noah/100" class="avatar-img"></div>
             <span class="story-username">Noah</span>
@@ -888,6 +896,15 @@
             <div class="avatar-ring seen"><img src="https://picsum.photos/seed/ava/100" class="avatar-img"></div>
             <span class="story-username">Ava</span>
           </div>
+          <div class="story-avatar-item" onclick="openStoryViewer('Liam', 0); toggleStoryDrawer(false);">
+            <div class="avatar-ring seen"><img src="https://picsum.photos/seed/liam/100" class="avatar-img"></div>
+            <span class="story-username">Liam</span>
+          </div>
+        </div>
+
+        <!-- Thumb-Accessible Close Button at Bottom -->
+        <div class="drawer-footer">
+          <button class="close-drawer-btn" onclick="toggleStoryDrawer(false)">Close ✕</button>
         </div>
       </div>
     </section>
@@ -914,7 +931,7 @@
           </div>
           <div style="display: flex; gap: 6px;">
             <span class="post-badge badge-storyboard">Storyboard</span>
-            <span class="post-badge badge-trending">🔥 Trending</span>
+            <span class="post-badge badge-trending disc-only-label" style="display: none;">🔥 Trending</span>
           </div>
         </div>
 
@@ -991,7 +1008,7 @@
               <div style="font-size: 0.7rem; color: var(--text-muted);">45 mins ago</div>
             </div>
           </div>
-          <span class="post-badge badge-rising">📈 Rising</span>
+          <span class="post-badge badge-rising disc-only-label" style="display: none;">📈 Rising</span>
         </div>
 
         <div style="aspect-ratio: 4/5; width: 100%; background: #000;">
@@ -1021,7 +1038,7 @@
               <div style="font-size: 0.7rem; color: var(--text-muted);">3 mins ago</div>
             </div>
           </div>
-          <span class="post-badge badge-new">⏱️ New</span>
+          <span class="post-badge badge-new disc-only-label" style="display: none;">⏱️ New</span>
         </div>
 
         <div style="padding: 24px; background: var(--surface-elevated); font-size: 1.1rem; font-weight: 600; line-height: 1.5;">
@@ -1043,15 +1060,15 @@
     <!-- MOBILE BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
       <button class="nav-item active" id="nav-home" onclick="switchMainTab('home')">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         Home
       </button>
       <button class="nav-item" id="nav-discover" onclick="switchMainTab('discover')">
-        <svg viewBox="0 0 24 24"><path d="M12 2.59l5.7 5.7-1.41 1.41L13 6.41V16h-2V6.41L7.71 9.7 6.3 8.29zM4 18h16v2H4z"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
         Discover
       </button>
       <button class="nav-item" style="opacity: 0.4; cursor: not-allowed;" title="Profile coming next">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         Profile
       </button>
     </nav>
@@ -1223,17 +1240,28 @@
     function switchMainTab(tab) {
       const navHome = document.getElementById('nav-home');
       const navDisc = document.getElementById('nav-discover');
+      const deskNavHome = document.getElementById('desk-nav-home');
+      const deskNavDisc = document.getElementById('desk-nav-discover');
       const discSubtabs = document.getElementById('discover-subtabs');
+      const discLabels = document.querySelectorAll('.disc-only-label');
 
       if(tab === 'home') {
         navHome.classList.add('active');
         navDisc.classList.remove('active');
+        if(deskNavHome) deskNavHome.classList.add('active');
+        if(deskNavDisc) deskNavDisc.classList.remove('active');
+        
         discSubtabs.style.display = 'none';
+        discLabels.forEach(lbl => lbl.style.display = 'none');
         showAllPosts();
       } else if(tab === 'discover') {
         navDisc.classList.add('active');
         navHome.classList.remove('active');
+        if(deskNavDisc) deskNavDisc.classList.add('active');
+        if(deskNavHome) deskNavHome.classList.remove('active');
+
         discSubtabs.style.display = 'flex';
+        discLabels.forEach(lbl => lbl.style.display = 'inline-block');
         filterDiscover('trending', document.querySelector('.disc-tab-btn'));
       }
     }
