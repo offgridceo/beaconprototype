@@ -627,6 +627,31 @@
       line-height: 1.4;
     }
 
+    /* Video player simulation block */
+    .video-card-preview {
+      aspect-ratio: 4/5;
+      width: 100%;
+      background: #050508;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-play-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
     /* FOOTER / NAVIGATION */
     .bottom-nav {
       position: fixed;
@@ -751,6 +776,19 @@
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
       overflow: hidden;
+    }
+
+    .load-more-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -918,143 +956,7 @@
 
     <!-- MAIN CONTENT FEED -->
     <section class="feed-container" id="feed-container">
-
-      <!-- POST 1: STORYBOARD POST -->
-      <article class="post-card" data-category="trending">
-        <div class="post-header">
-          <div class="post-user">
-            <img src="https://picsum.photos/seed/tokyo/100" class="post-user-img" alt="User">
-            <div>
-              <div class="post-username">@kenji_explores</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">2 hours ago</div>
-            </div>
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <span class="post-badge badge-storyboard">Storyboard</span>
-            <span class="post-badge badge-trending disc-only-label" style="display: none;">🔥 Trending</span>
-          </div>
-        </div>
-
-        <!-- STORYBOARD SLIDER CONTENT -->
-        <div class="storyboard-viewport" id="sb-viewport-1">
-          <div class="storyboard-nav-dots">
-            <div class="dot-step active"></div>
-            <div class="dot-step"></div>
-            <div class="dot-step"></div>
-            <div class="dot-step"></div>
-          </div>
-
-          <button class="sb-btn-left" onclick="moveStoryboard(1, -1)">‹</button>
-          <button class="sb-btn-right" onclick="moveStoryboard(1, 1)">›</button>
-
-          <!-- Slide 1: Hook Text Card -->
-          <div class="slide-item active">
-            <div class="slide-text-card" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
-              <span>First 24 hours wandering around Shibuya & Harajuku... 🇯🇵</span>
-            </div>
-          </div>
-
-          <!-- Slide 2: Photo Card -->
-          <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80" class="slide-img" alt="Tokyo Street">
-            <div class="caption-overlay-strip">Found this hidden vinyl record café tucked away on the 3rd floor.</div>
-          </div>
-
-          <!-- Slide 3: Photo + Caption -->
-          <div class="slide-item">
-            <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80" class="slide-img" alt="Tokyo Alley">
-            <div class="caption-overlay-strip">Midnight ramen runs hit completely different here.</div>
-          </div>
-
-          <!-- Slide 4: Vista Integration Bridge -->
-          <div class="slide-item">
-            <div class="vista-cta-card">
-              <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Full Travel Log</div>
-              <h3 style="font-size: 1.2rem; color: #fff;">Watch "Tokyo Uncurated" VLOG</h3>
-              <p style="font-size: 0.8rem; color: var(--text-muted);">4K High Quality · Native Vista Player</p>
-              <button class="vista-btn" onclick="openVistaPlayer('Tokyo Uncurated VLOG - Kenji')">
-                ▶ Watch on Vista
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- POST FOOTER INTERACTION -->
-        <div class="post-actions">
-          <div class="action-group">
-            <button class="action-icon-btn" onclick="toggleLike(this)">
-              <span class="icon">🤍</span> <span class="count">1,420</span>
-            </button>
-            <button class="action-icon-btn">
-              💬 <span>89</span>
-            </button>
-            <button class="action-icon-btn">
-              🔄 <span>34</span>
-            </button>
-          </div>
-        </div>
-        <div class="post-caption-block">
-          <strong>@kenji_explores</strong> Swipe through the Storyboard to check out my first day! Full video attached on the last slide.
-        </div>
-      </article>
-
-      <!-- POST 2: RISING SINGLE POST -->
-      <article class="post-card" data-category="rising">
-        <div class="post-header">
-          <div class="post-user">
-            <img src="https://picsum.photos/seed/art/100" class="post-user-img" alt="User">
-            <div>
-              <div class="post-username">@design_daily</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">45 mins ago</div>
-            </div>
-          </div>
-          <span class="post-badge badge-rising disc-only-label" style="display: none;">📈 Rising</span>
-        </div>
-
-        <div style="aspect-ratio: 4/5; width: 100%; background: #000;">
-          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" style="width: 100%; height: 100%; object-fit: cover;" alt="Abstract Design">
-        </div>
-
-        <div class="post-actions">
-          <div class="action-group">
-            <button class="action-icon-btn" onclick="toggleLike(this)">
-              <span class="icon">🤍</span> <span class="count">482</span>
-            </button>
-            <button class="action-icon-btn">💬 <span>12</span></button>
-          </div>
-        </div>
-        <div class="post-caption-block">
-          <strong>@design_daily</strong> Exploring organic 3D textures today. What do you think of this render?
-        </div>
-      </article>
-
-      <!-- POST 3: NEW POST -->
-      <article class="post-card" data-category="new">
-        <div class="post-header">
-          <div class="post-user">
-            <img src="https://picsum.photos/seed/coffee/100" class="post-user-img" alt="User">
-            <div>
-              <div class="post-username">@sara_crafts</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">3 mins ago</div>
-            </div>
-          </div>
-          <span class="post-badge badge-new disc-only-label" style="display: none;">⏱️ New</span>
-        </div>
-
-        <div style="padding: 24px; background: var(--surface-elevated); font-size: 1.1rem; font-weight: 600; line-height: 1.5;">
-          "The best part about an open, decentralized web is that creativity wins over clickbait algorithms again." 🌐✨
-        </div>
-
-        <div class="post-actions">
-          <div class="action-group">
-            <button class="action-icon-btn" onclick="toggleLike(this)">
-              <span class="icon">🤍</span> <span class="count">14</span>
-            </button>
-            <button class="action-icon-btn">💬 <span>2</span></button>
-          </div>
-        </div>
-      </article>
-
+      <!-- Posts dynamically generated via Javascript below -->
     </section>
 
     <!-- MOBILE BOTTOM NAVIGATION -->
@@ -1215,12 +1117,12 @@
     }
 
     /* ================= STORYBOARD MULTI-SLIDE NAVIGATION ================= */
-    const storyboardState = { 1: 0 };
-    const storyboardTotal = { 1: 4 };
+    const storyboardState = {};
+    const storyboardTotal = {};
 
     function moveStoryboard(id, delta) {
-      const current = storyboardState[id];
-      const total = storyboardTotal[id];
+      const current = storyboardState[id] || 0;
+      const total = storyboardTotal[id] || 4;
       let next = current + delta;
 
       if(next < 0) next = 0;
@@ -1235,6 +1137,237 @@
       slides.forEach((s, i) => s.classList.toggle('active', i === next));
       dots.forEach((d, i) => d.classList.toggle('active', i === next));
     }
+
+    /* ================= EXPANDED DATA SEEDING FOR REALISTIC LIVE FEED ================= */
+    const postDatabase = [
+      {
+        id: 1,
+        type: 'storyboard',
+        category: 'trending',
+        user: '@kenji_explores',
+        avatar: 'https://picsum.photos/seed/tokyo/100',
+        time: '2 hours ago',
+        caption: 'Swipe through the Storyboard to check out my first day in Tokyo! Full video attached on the last slide.',
+        likes: '1,420',
+        comments: '89',
+        slides: [
+          { type: 'text', content: 'First 24 hours wandering around Shibuya & Harajuku... 🇯🇵', bg: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80', caption: 'Found this hidden vinyl record café tucked away on the 3rd floor.' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80', caption: 'Midnight ramen runs hit completely different here.' },
+          { type: 'vista', title: 'Tokyo Uncurated VLOG - Kenji' }
+        ]
+      },
+      {
+        id: 2,
+        type: 'image',
+        category: 'rising',
+        user: '@design_daily',
+        avatar: 'https://picsum.photos/seed/art/100',
+        time: '45 mins ago',
+        caption: 'Exploring organic 3D textures today. What do you think of this render?',
+        imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+        likes: '482',
+        comments: '12'
+      },
+      {
+        id: 3,
+        type: 'text',
+        category: 'new',
+        user: '@sara_crafts',
+        avatar: 'https://picsum.photos/seed/coffee/100',
+        time: '3 mins ago',
+        text: '"The best part about an open, decentralized web is that creativity wins over clickbait algorithms again." 🌐✨',
+        likes: '14',
+        comments: '2'
+      },
+      {
+        id: 4,
+        type: 'storyboard',
+        category: 'rising',
+        user: '@chef_marcus',
+        avatar: 'https://picsum.photos/seed/marcus/100',
+        time: '1 hour ago',
+        caption: '3 steps to mastering traditional Neapolitan pizza dough at home. 🍕',
+        likes: '890',
+        comments: '45',
+        slides: [
+          { type: 'text', content: 'Mastering 72-Hour Fermentation Dough 🍕', bg: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80', caption: 'Step 1: High hydration flour mix (70% water).' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', caption: 'Step 2: 900°F woodfire blast for 60 seconds.' }
+        ]
+      },
+      {
+        id: 5,
+        type: 'video',
+        category: 'trending',
+        user: '@soundscapes',
+        avatar: 'https://picsum.photos/seed/synth/100',
+        time: '3 hours ago',
+        caption: 'Analog modular synth improvisations recorded live in the studio. 🎛️🔊',
+        videoBg: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+        likes: '2,105',
+        comments: '132'
+      },
+      {
+        id: 6,
+        type: 'image',
+        category: 'new',
+        user: '@alpine_hikes',
+        avatar: 'https://picsum.photos/seed/hike/100',
+        time: '12 mins ago',
+        caption: 'Sunrise over the North Cascades. High altitude clarity hits different.',
+        imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+        likes: '96',
+        comments: '8'
+      },
+      {
+        id: 7,
+        type: 'text',
+        category: 'trending',
+        user: '@tech_philosophy',
+        avatar: 'https://picsum.photos/seed/mind/100',
+        time: '4 hours ago',
+        text: 'Privacy isn\'t about hiding something wrong. It\'s about protecting the space to think, build, and express yourself freely.',
+        likes: '3,840',
+        comments: '310'
+      },
+      {
+        id: 8,
+        type: 'storyboard',
+        category: 'new',
+        user: '@urban_arch',
+        avatar: 'https://picsum.photos/seed/arch/100',
+        time: '18 mins ago',
+        caption: 'Restoring a mid-century architectural gem in downtown Portland.',
+        likes: '120',
+        comments: '15',
+        slides: [
+          { type: 'text', content: '1962 Mid-Century Home Renovation Tour 🏛️', bg: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', caption: 'Preserving original cedar paneling and floor-to-ceiling glass.' }
+        ]
+      }
+    ];
+
+    function renderFeed(postsArray) {
+      const container = document.getElementById('feed-container');
+      container.innerHTML = '';
+
+      postsArray.forEach(post => {
+        const article = document.createElement('article');
+        article.className = 'post-card';
+        article.dataset.category = post.category;
+
+        let badgeHtml = '';
+        if (post.type === 'storyboard') {
+          badgeHtml += `<span class="post-badge badge-storyboard">Storyboard</span> `;
+        }
+        
+        let labelClass = post.category === 'trending' ? 'badge-trending' : (post.category === 'rising' ? 'badge-rising' : 'badge-new');
+        let labelIcon = post.category === 'trending' ? '🔥 Trending' : (post.category === 'rising' ? '📈 Rising' : '⏱️ New');
+        badgeHtml += `<span class="post-badge ${labelClass} disc-only-label" style="display: none;">${labelIcon}</span>`;
+
+        let mediaBodyHtml = '';
+
+        if (post.type === 'storyboard') {
+          storyboardState[post.id] = 0;
+          storyboardTotal[post.id] = post.slides.length;
+
+          let dots = post.slides.map((_, i) => `<div class="dot-step ${i===0?'active':''}"></div>`).join('');
+          let slideItems = post.slides.map((slide, i) => {
+            let active = i === 0 ? 'active' : '';
+            if(slide.type === 'text') {
+              return `<div class="slide-item ${active}"><div class="slide-text-card" style="background: ${slide.bg}"><span>${slide.content}</span></div></div>`;
+            } else if(slide.type === 'image') {
+              return `<div class="slide-item ${active}"><img src="${slide.url}" class="slide-img" alt="Slide"><div class="caption-overlay-strip">${slide.caption}</div></div>`;
+            } else if(slide.type === 'vista') {
+              return `<div class="slide-item ${active}">
+                <div class="vista-cta-card">
+                  <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Full Travel Log</div>
+                  <h3 style="font-size: 1.2rem; color: #fff;">${slide.title}</h3>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">4K High Quality · Native Vista Player</p>
+                  <button class="vista-btn" onclick="openVistaPlayer('${slide.title}')">▶ Watch on Vista</button>
+                </div>
+              </div>`;
+            }
+          }).join('');
+
+          mediaBodyHtml = `
+            <div class="storyboard-viewport" id="sb-viewport-${post.id}">
+              <div class="storyboard-nav-dots">${dots}</div>
+              <button class="sb-btn-left" onclick="moveStoryboard(${post.id}, -1)">‹</button>
+              <button class="sb-btn-right" onclick="moveStoryboard(${post.id}, 1)">›</button>
+              ${slideItems}
+            </div>
+          `;
+        } else if (post.type === 'image') {
+          mediaBodyHtml = `
+            <div style="aspect-ratio: 4/5; width: 100%; background: #000;">
+              <img src="${post.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;" alt="Post image">
+            </div>
+          `;
+        } else if (post.type === 'text') {
+          mediaBodyHtml = `
+            <div style="padding: 28px; background: var(--surface-elevated); font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: var(--text-main);">
+              ${post.text}
+            </div>
+          `;
+        } else if (post.type === 'video') {
+          mediaBodyHtml = `
+            <div class="video-card-preview" style="background: ${post.videoBg}">
+              <div class="video-play-badge">▶</div>
+            </div>
+          `;
+        }
+
+        article.innerHTML = `
+          <div class="post-header">
+            <div class="post-user">
+              <img src="${post.avatar}" class="post-user-img" alt="User">
+              <div>
+                <div class="post-username">${post.user}</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted);">${post.time}</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 6px;">${badgeHtml}</div>
+          </div>
+          ${mediaBodyHtml}
+          <div class="post-actions">
+            <div class="action-group">
+              <button class="action-icon-btn" onclick="toggleLike(this)">
+                <span class="icon">🤍</span> <span class="count">${post.likes}</span>
+              </button>
+              <button class="action-icon-btn">💬 <span>${post.comments}</span></button>
+              <button class="action-icon-btn">🔄</button>
+            </div>
+          </div>
+          ${post.caption ? `<div class="post-caption-block"><strong>${post.user}</strong> ${post.caption}</div>` : ''}
+        `;
+
+        container.appendChild(article);
+      });
+
+      // Add Infinite Load Button at bottom of feed
+      const loadBtn = document.createElement('button');
+      loadBtn.className = 'load-more-btn';
+      loadBtn.innerText = 'Load More Posts...';
+      loadBtn.onclick = () => {
+        loadBtn.innerText = 'Refreshing Feed...';
+        setTimeout(() => {
+          renderFeed([...postDatabase].sort(() => Math.random() - 0.5));
+          if(document.getElementById('nav-discover').classList.contains('active')) {
+            document.querySelectorAll('.disc-only-label').forEach(lbl => lbl.style.display = 'inline-block');
+          }
+        }, 400);
+      };
+      container.appendChild(loadBtn);
+    }
+
+    /* Initialize feed on start */
+    window.addEventListener('DOMContentLoaded', () => {
+      // Shuffle array to feel fresh on every view
+      const shuffled = [...postDatabase].sort(() => Math.random() - 0.5);
+      renderFeed(shuffled);
+    });
 
     /* ================= MAIN TAB SWITCHING (HOME / DISCOVER) ================= */
     function switchMainTab(tab) {
