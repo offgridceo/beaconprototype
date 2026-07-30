@@ -589,7 +589,7 @@
       border: 1px solid var(--border-color);
     }
 
-    /* PROFILE STYLES - STRICT DISPLAY CLEANUP */
+    /* PROFILE STYLES */
     .profile-container {
       display: none;
       flex-direction: column;
@@ -1363,6 +1363,71 @@
       }
     }
 
+    /* RENDER CARD CONTENT HELPER */
+    function buildPostHTML(post) {
+      let badgeHtml = '';
+      if (post.type === 'storyboard') badgeHtml += `<span class="post-badge badge-storyboard">Storyboard</span> `;
+      else if (post.type === 'short') badgeHtml += `<span class="post-badge badge-short">Short</span> `;
+      else if (post.type === 'audio') badgeHtml += `<span class="post-badge badge-audio">Audio</span> `;
+      else if (post.type === 'photo') badgeHtml += `<span class="post-badge badge-photo">Photo</span> `;
+      else if (post.type === 'text') badgeHtml += `<span class="post-badge badge-text">Text</span> `;
+
+      let labelIcon = post.category === 'trending' ? '🔥' : (post.category === 'rising' ? '📈' : '⏱️');
+      badgeHtml += `<span class="badge-disc-emoji disc-only-label" style="display: none;">${labelIcon}</span>`;
+
+      let mediaBodyHtml = '';
+
+      if (post.type === 'storyboard') {
+        let dots = post.slides.map((_, i) => `<div class="dot-step ${i===0?'active':''}"></div>`).join('');
+        let slideItems = post.slides.map((slide, i) => {
+          let active = i === 0 ? 'active' : '';
+          if(slide.type === 'text') {
+            return `<div class="slide-item ${active}"><div class="slide-text-card" style="background: ${slide.bg}"><span>${slide.content}</span></div></div>`;
+          } else if(slide.type === 'image') {
+            return `<div class="slide-item ${active}"><img src="${slide.url}" class="slide-img" alt="Slide"><div class="caption-overlay-strip">${slide.caption}</div></div>`;
+          }
+        }).join('');
+
+        mediaBodyHtml = `
+          <div class="storyboard-viewport" id="sb-viewport-${post.id}">
+            <div class="storyboard-nav-dots">${dots}</div>
+            ${slideItems}
+          </div>
+        `;
+      } else if (post.type === 'photo') {
+        mediaBodyHtml = `<div style="aspect-ratio: 4/5; width: 100%; background: #000;"><img src="${post.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>`;
+      } else if (post.type === 'text') {
+        mediaBodyHtml = `<div style="padding: 28px; background: var(--surface-elevated); font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: var(--text-main);">${post.text}</div>`;
+      } else if (post.type === 'short') {
+        mediaBodyHtml = `<div class="video-card-preview" style="background: ${post.videoBg}"><div class="video-play-badge">▶ BEACON SHORT</div></div>`;
+      } else if (post.type === 'audio') {
+        mediaBodyHtml = `<div class="audio-card-preview" style="background: ${post.audioBg}"><div class="video-play-badge">🎙️ PLAY AUDIO</div></div>`;
+      }
+
+      return `
+        <div class="post-header">
+          <div class="post-user" onclick="event.stopPropagation(); openUserProfile('${post.user}')">
+            <img src="${post.avatar}" class="post-user-img">
+            <div>
+              <div class="post-username">${post.user}</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">${post.time}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px;">${badgeHtml}</div>
+        </div>
+        ${mediaBodyHtml}
+        <div class="post-actions">
+          <div class="action-group">
+            <button class="action-icon-btn" onclick="event.stopPropagation(); toggleLike(this)"><span class="icon">🤍</span> <span class="count">${post.likes}</span></button>
+            <button class="action-icon-btn">💬 <span>${post.comments}</span></button>
+            <button class="action-icon-btn">🔄</button>
+            <button class="action-icon-btn">🔖</button>
+          </div>
+        </div>
+        ${post.caption ? `<div class="post-caption-block"><strong onclick="event.stopPropagation(); openUserProfile('${post.user}')" style="cursor:pointer;">${post.user}</strong> ${post.caption}</div>` : ''}
+      `;
+    }
+
     /* RENDER FEED ENGINE */
     function renderFeed(postsArray, containerId = 'feed-container', append = false) {
       const container = document.getElementById(containerId);
@@ -1378,68 +1443,7 @@
           }
         };
 
-        /* TYPE BADGES WITH DEFAULT COLOR CODING */
-        let badgeHtml = '';
-        if (post.type === 'storyboard') badgeHtml += `<span class="post-badge badge-storyboard">Storyboard</span> `;
-        else if (post.type === 'short') badgeHtml += `<span class="post-badge badge-short">Short</span> `;
-        else if (post.type === 'audio') badgeHtml += `<span class="post-badge badge-audio">Audio</span> `;
-        else if (post.type === 'photo') badgeHtml += `<span class="post-badge badge-photo">Photo</span> `;
-        else if (post.type === 'text') badgeHtml += `<span class="post-badge badge-text">Text</span> `;
-
-        /* DISCOVER EMOJI ONLY BADGE */
-        let labelIcon = post.category === 'trending' ? '🔥' : (post.category === 'rising' ? '📈' : '⏱️');
-        badgeHtml += `<span class="badge-disc-emoji disc-only-label" style="display: none;">${labelIcon}</span>`;
-
-        let mediaBodyHtml = '';
-
-        if (post.type === 'storyboard') {
-          let dots = post.slides.map((_, i) => `<div class="dot-step ${i===0?'active':''}"></div>`).join('');
-          let slideItems = post.slides.map((slide, i) => {
-            let active = i === 0 ? 'active' : '';
-            if(slide.type === 'text') {
-              return `<div class="slide-item ${active}"><div class="slide-text-card" style="background: ${slide.bg}"><span>${slide.content}</span></div></div>`;
-            } else if(slide.type === 'image') {
-              return `<div class="slide-item ${active}"><img src="${slide.url}" class="slide-img" alt="Slide"><div class="caption-overlay-strip">${slide.caption}</div></div>`;
-            }
-          }).join('');
-
-          mediaBodyHtml = `
-            <div class="storyboard-viewport" id="sb-viewport-${post.id}">
-              <div class="storyboard-nav-dots">${dots}</div>
-              ${slideItems}
-            </div>
-          `;
-        } else if (post.type === 'photo') {
-          mediaBodyHtml = `<div style="aspect-ratio: 4/5; width: 100%; background: #000;"><img src="${post.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>`;
-        } else if (post.type === 'text') {
-          mediaBodyHtml = `<div style="padding: 28px; background: var(--surface-elevated); font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: var(--text-main);">${post.text}</div>`;
-        } else if (post.type === 'short') {
-          mediaBodyHtml = `<div class="video-card-preview" style="background: ${post.videoBg}"><div class="video-play-badge">▶ BEAM SHORT</div></div>`;
-        } else if (post.type === 'audio') {
-          mediaBodyHtml = `<div class="audio-card-preview" style="background: ${post.audioBg}"><div class="video-play-badge">🎙️ PLAY AUDIO</div></div>`;
-        }
-
-        article.innerHTML = `
-          <div class="post-header">
-            <div class="post-user" onclick="event.stopPropagation(); openUserProfile('${post.user}')">
-              <img src="${post.avatar}" class="post-user-img">
-              <div>
-                <div class="post-username">${post.user}</div>
-                <div style="font-size: 0.7rem; color: var(--text-muted);">${post.time}</div>
-              </div>
-            </div>
-            <div style="display: flex; gap: 6px;">${badgeHtml}</div>
-          </div>
-          ${mediaBodyHtml}
-          <div class="post-actions">
-            <div class="action-group">
-              <button class="action-icon-btn" onclick="event.stopPropagation(); toggleLike(this)"><span class="icon">🤍</span> <span class="count">${post.likes}</span></button>
-              <button class="action-icon-btn">💬 <span>${post.comments}</span></button>
-              <button class="action-icon-btn">🔄</button>
-            </div>
-          </div>
-          ${post.caption ? `<div class="post-caption-block"><strong onclick="event.stopPropagation(); openUserProfile('${post.user}')" style="cursor:pointer;">${post.user}</strong> ${post.caption}</div>` : ''}
-        `;
+        article.innerHTML = buildPostHTML(post);
         container.appendChild(article);
       });
     }
@@ -1450,22 +1454,13 @@
       const body = document.getElementById('full-post-content-body');
       body.innerHTML = '';
       
-      const clone = document.createElement('div');
-      clone.className = 'post-card';
-      clone.style.border = 'none';
-      clone.innerHTML = `
-        <div class="post-header">
-          <div class="post-user">
-            <img src="${post.avatar}" class="post-user-img">
-            <div>
-              <div class="post-username">${post.user}</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">${post.time}</div>
-            </div>
-          </div>
-        </div>
-        <div style="padding: 20px;">${post.caption || post.text || 'Full screen focused perspective.'}</div>
-      `;
-      body.appendChild(clone);
+      const card = document.createElement('div');
+      card.className = 'post-card';
+      card.style.border = 'none';
+      card.style.borderRadius = '0';
+      card.innerHTML = buildPostHTML(post);
+
+      body.appendChild(card);
       modal.classList.add('active');
     }
 
