@@ -323,11 +323,6 @@
       transition: opacity 0.25s ease, transform 0.25s ease;
     }
 
-    .feed-container.fade-out {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-
     .post-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -364,6 +359,24 @@
       font-weight: 700;
     }
     .post-username:hover { text-decoration: underline; }
+
+    .follow-disc-btn {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid var(--accent-primary);
+      color: var(--accent-primary);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      margin-left: 6px;
+      transition: var(--transition-smooth);
+    }
+    .follow-disc-btn.following {
+      background: var(--surface-elevated);
+      border-color: var(--border-color);
+      color: var(--text-muted);
+    }
 
     /* COLOR CODED CONTENT BADGES */
     .post-badge {
@@ -422,9 +435,9 @@
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
-      line-height: 1.3;
+      line-height: 1.35;
       color: #fff;
     }
 
@@ -464,6 +477,16 @@
     }
     .dot-step.active { background: #fff; }
 
+    .storyboard-tap-left, .storyboard-tap-right {
+      position: absolute;
+      top: 25px;
+      bottom: 0;
+      width: 40%;
+      z-index: 8;
+    }
+    .storyboard-tap-left { left: 0; }
+    .storyboard-tap-right { right: 0; }
+
     .post-actions {
       display: flex;
       justify-content: space-between;
@@ -479,7 +502,7 @@
       background: none;
       border: none;
       color: var(--text-main);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -637,6 +660,7 @@
       width: 32px;
       height: 32px;
       border-radius: var(--radius-full);
+      object-fit: cover;
     }
 
     .comment-box {
@@ -647,6 +671,110 @@
       border: 1px solid var(--border-color);
     }
 
+    /* 9:16 VERTICAL FULLSCREEN STORY VIEWER */
+    .story-viewer-modal {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .story-viewer-modal.active { display: flex; }
+
+    .story-frame-viewport {
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 9/16;
+      background: var(--card-bg);
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .story-progress-bar-container {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      gap: 4px;
+      z-index: 30;
+    }
+
+    .story-progress-track {
+      height: 3px;
+      flex: 1;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .story-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #fff;
+    }
+    .story-progress-fill.running {
+      animation: fillStory 15s linear forwards;
+    }
+    .story-progress-fill.completed { width: 100%; }
+
+    @keyframes fillStory {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+    .story-viewer-header {
+      position: absolute;
+      top: 24px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 30;
+    }
+
+    .story-viewer-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .story-viewer-img {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid #fff;
+    }
+
+    .story-tap-left, .story-tap-right {
+      position: absolute;
+      top: 70px;
+      bottom: 0;
+      width: 45%;
+      z-index: 25;
+    }
+    .story-tap-left { left: 0; }
+    .story-tap-right { right: 0; }
+
+    .story-media-content {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* PROFILE STYLES */
     .profile-container {
       display: none;
@@ -654,9 +782,7 @@
       background: var(--bg-dark);
       width: 100%;
     }
-    .profile-container.active {
-      display: flex;
-    }
+    .profile-container.active { display: flex; }
 
     .profile-header-card {
       display: flex;
@@ -823,7 +949,7 @@
       border-bottom-color: var(--accent-primary);
     }
 
-    /* FLOATING CREATE BUTTON & CREATOR POPUP MENU */
+    /* FLOATING CREATE BUTTON */
     .floating-create-btn {
       position: fixed;
       bottom: 82px;
@@ -836,7 +962,7 @@
       border: none;
       font-size: 1.8rem;
       font-weight: 700;
-      display: none; /* ONLY VISIBLE ON OWN PROFILE */
+      display: none;
       align-items: center;
       justify-content: center;
       cursor: pointer;
@@ -1092,27 +1218,9 @@
 
     <!-- STORY DOCK (VISIBLE ONLY ON HOME) -->
     <section class="story-dock-wrapper" id="main-story-dock">
-      <div class="story-scroll-container" id="story-row-creator">
-        <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0)">
-          <div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img" alt="Alice"></div>
-          <span class="story-username">Alice</span>
-        </div>
-        <div class="story-avatar-item" onclick="openStoryViewer('Bob', 0)">
-          <div class="avatar-ring"><img src="https://picsum.photos/seed/bob/100" class="avatar-img" alt="Bob"></div>
-          <span class="story-username">Bob</span>
-        </div>
-        <div class="story-avatar-item" onclick="openStoryViewer('Mia', 0)">
-          <div class="avatar-ring"><img src="https://picsum.photos/seed/mia/100" class="avatar-img" alt="Mia"></div>
-          <span class="story-username">Mia</span>
-        </div>
-        <div class="story-avatar-item" onclick="openStoryViewer('Carlos', 0)">
-          <div class="avatar-ring seen"><img src="https://picsum.photos/seed/carlos/100" class="avatar-img" alt="Carlos"></div>
-          <span class="story-username">Carlos</span>
-        </div>
-        <button class="more-stories-btn" onclick="toggleStoryDrawer(true)">+37</button>
-      </div>
+      <div class="story-scroll-container" id="story-row-main"></div>
 
-      <!-- EXPANDABLE STORY DRAWER (+37) -->
+      <!-- EXPANDABLE STORY DRAWER -->
       <div class="story-drawer" id="story-drawer">
         <div class="drawer-header">
           <div class="view-mode-toggle">
@@ -1129,7 +1237,7 @@
       </div>
     </section>
 
-    <!-- DISCOVER CATEGORY TABS (ALL, TRENDING, NEW, RISING) -->
+    <!-- DISCOVER CATEGORY TABS -->
     <div class="discover-tabs" id="discover-subtabs" style="display: none;">
       <button class="disc-tab-btn active" onclick="filterDiscover('all', this)">All</button>
       <button class="disc-tab-btn" onclick="filterDiscover('trending', this)">🔥 Trending</button>
@@ -1144,7 +1252,7 @@
     <!-- DYNAMIC USER PROFILE CONTAINER -->
     <section class="profile-container" id="profile-view">
       <div class="profile-header-card">
-        <div class="profile-hero-avatar" onclick="openAvatarExpansion()">
+        <div class="profile-hero-avatar">
           <img src="" id="current-hero-img" class="profile-hero-img" alt="User Profile">
         </div>
 
@@ -1175,7 +1283,7 @@
         <p class="profile-bio" id="prof-bio">---</p>
       </div>
 
-      <!-- PROFILE FEED TABS: POSTS, SHORTS, AUDIO, STICKERS -->
+      <!-- PROFILE FEED TABS -->
       <div class="profile-tabs-bar">
         <button class="prof-tab-btn active" onclick="switchProfileTab('posts', this)">📱 Posts</button>
         <button class="prof-tab-btn" onclick="switchProfileTab('shorts', this)">▶️ Shorts</button>
@@ -1236,22 +1344,29 @@
       <button onclick="closeFullscreenPost()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div id="full-post-content-body"></div>
-    <div class="comments-section">
-      <h4 style="font-size: 0.9rem; color: var(--text-muted);">Conversations</h4>
-      <div class="comment-item">
-        <img src="https://picsum.photos/seed/bob/100" class="comment-avatar">
-        <div class="comment-box">
-          <strong>@bob</strong>
-          <p style="margin-top: 4px; color: var(--text-main);">This production quality is clean! Love how Storyboards frame the narrative. 🔥</p>
+    <div class="comments-section" id="full-post-comments-container"></div>
+  </div>
+
+  <!-- 9:16 FULLSCREEN VERTICAL STORY VIEWER -->
+  <div class="story-viewer-modal" id="story-viewer-modal">
+    <div class="story-frame-viewport">
+      <div class="story-progress-bar-container" id="story-progress-container"></div>
+      
+      <div class="story-viewer-header">
+        <div class="story-viewer-user">
+          <img src="" id="story-viewer-avatar" class="story-viewer-img">
+          <div>
+            <div id="story-viewer-username" style="font-size:0.85rem; font-weight:700; color:#fff;">User</div>
+            <div id="story-viewer-time" style="font-size:0.68rem; color:rgba(255,255,255,0.7);">Just now</div>
+          </div>
         </div>
+        <button onclick="closeStoryViewer()" style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;">✕</button>
       </div>
-      <div class="comment-item">
-        <img src="https://picsum.photos/seed/mia/100" class="comment-avatar">
-        <div class="comment-box">
-          <strong>@mia</strong>
-          <p style="margin-top: 4px; color: var(--text-main);">Decentralized social media finally feeling smooth. 🌐</p>
-        </div>
-      </div>
+
+      <div class="story-tap-left" onclick="storyNavigate(-1)"></div>
+      <div class="story-tap-right" onclick="storyNavigate(1)"></div>
+
+      <div class="story-media-content" id="story-media-content"></div>
     </div>
   </div>
 
@@ -1296,96 +1411,112 @@
   <script>
     /* USER PROFILES DATABASE */
     const profilesDB = {
-      '@tecuani': {
-        name: 'Tonatecuani',
-        handle: '@tecuani',
-        avatar: 'https://picsum.photos/seed/tecuani_main/200',
-        posts: '48',
-        followers: '14.2K',
-        following: '380',
-        bio: 'Independent Hip-Hop Artist & Producer 🎙️ | Crafting raw narratives & soundscapes for LibreNet | Building independent web infrastructure 🌐'
-      },
-      '@kenji_explores': {
-        name: 'Kenji Takahashi',
-        handle: '@kenji_explores',
-        avatar: 'https://picsum.photos/seed/tokyo/100',
-        posts: '124',
-        followers: '28.5K',
-        following: '512',
-        bio: 'Tokyo-based street photographer & documentary creator. Capturing nocturnal perspectives 📷'
-      }
+      '@tecuani': { name: 'Tonatecuani', handle: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', posts: '48', followers: '14.2K', following: '380', bio: 'Independent Hip-Hop Artist & Producer 🎙️ | Crafting raw narratives & soundscapes for LibreNet | Building independent web infrastructure 🌐' },
+      '@kenji_explores': { name: 'Kenji Takahashi', handle: '@kenji_explores', avatar: 'https://picsum.photos/seed/tokyo/100', posts: '124', followers: '28.5K', following: '512', bio: 'Tokyo-based street photographer & documentary creator 📷' }
     };
 
     let activeProfileHandle = '@tecuani';
+    const slideState = {}; // Track storyboard slides active index
 
-    /* POSTS DATABASE WITH COLOR-CODED CONTENT TYPES */
-    const postDatabase = [
-      {
-        id: 1,
-        type: 'storyboard',
-        category: 'trending',
-        user: '@kenji_explores',
-        avatar: 'https://picsum.photos/seed/tokyo/100',
-        time: '2 hours ago',
-        caption: 'Swipe through the Storyboard to check out my first day in Tokyo!',
-        likes: '1,420',
-        comments: '89',
-        slides: [
-          { type: 'text', content: 'First 24 hours wandering around Shibuya... 🇯🇵', bg: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' },
-          { type: 'image', url: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80', caption: 'Vinyl record café.' }
-        ]
-      },
-      {
-        id: 2,
-        type: 'photo',
-        category: 'rising',
-        user: '@design_daily',
-        avatar: 'https://picsum.photos/seed/art/100',
-        time: '45 mins ago',
-        caption: 'Exploring organic 3D textures today.',
-        imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-        likes: '482',
-        comments: '12'
-      },
-      {
-        id: 3,
-        type: 'text',
-        category: 'new',
-        user: '@sara_crafts',
-        avatar: 'https://picsum.photos/seed/coffee/100',
-        time: '3 mins ago',
-        text: '"Decentralized web allows creativity to win again." 🌐✨',
-        likes: '14',
-        comments: '2'
-      },
-      {
-        id: 4,
-        type: 'short',
-        category: 'rising',
-        user: '@tecuani',
-        avatar: 'https://picsum.photos/seed/tecuani_main/200',
-        time: '3 days ago',
-        caption: 'Live studio freestyle clip. Direct output session. 🔥🎙️',
-        videoBg: 'linear-gradient(135deg, #1e1b4b 0%, #311b92 100%)',
-        likes: '5,420',
-        comments: '412'
-      },
-      {
-        id: 5,
-        type: 'audio',
-        category: 'new',
-        user: '@tecuani',
-        avatar: 'https://picsum.photos/seed/tecuani_main/200',
-        time: 'Yesterday',
-        caption: 'Unreleased beat snippet for upcoming LibreNet project. 🎧',
-        duration: '0:42',
-        likes: '1,890',
-        comments: '94'
-      }
+    /* 20 UNIQUE HOME FEED POSTS (ACCOUNTS YOU FOLLOW) */
+    const homeFeedPosts = [
+      { id: 101, type: 'storyboard', category: 'trending', user: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', time: '10 mins ago', caption: 'Deep dive into the 7-track mixtape architecture.', likes: '1.2K', comments: '142', shares: '89', saves: '310', slides: [{ type: 'text', content: 'Contrapeso Mixtape breakdown 🎧', bg: '#4f46e5' }, { type: 'text', content: 'Track 1: Direct output freestyle.', bg: '#7c3aed' }, { type: 'image', url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=80', caption: 'Analog rack configuration.' }, { type: 'text', content: 'No punch-ins. Pure written bars.', bg: '#059669' }] },
+      { id: 102, type: 'photo', category: 'rising', user: '@kenji_explores', avatar: 'https://picsum.photos/seed/tokyo/100', time: '25 mins ago', caption: 'Late night alleyways in Shibuya.', imageUrl: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800&q=80', likes: '2.4K', comments: '88', shares: '120', saves: '540' },
+      { id: 103, type: 'text', category: 'new', user: '@cyber_freedom', avatar: 'https://picsum.photos/seed/cyber/100', time: '1 hr ago', text: 'Centralized servers are a point of failure. Encryption is a fundamental human right.', likes: '890', comments: '54', shares: '210', saves: '95' },
+      { id: 104, type: 'audio', category: 'new', user: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', time: '2 hrs ago', caption: 'Raw drum sample test recorded off SP404.', duration: '0:38', likes: '3.1K', comments: '210', shares: '145', saves: '890' },
+      { id: 105, type: 'short', category: 'trending', user: '@beat_architect', avatar: 'https://picsum.photos/seed/beat/100', time: '3 hrs ago', caption: 'Choppin sample from 1974 soul vinyl.', videoBg: 'linear-gradient(135deg, #1e1b4b 0%, #311b92 100%)', likes: '4.5K', comments: '310', shares: '520', saves: '1.1K' },
+      { id: 106, type: 'text', category: 'rising', user: '@news_unfiltered', avatar: 'https://picsum.photos/seed/news/100', time: '4 hrs ago', text: 'BREAKING: Open source AI models surpass proprietary API benchmarks in independent trials.', likes: '5.6K', comments: '480', shares: '1.2K', saves: '670' },
+      { id: 107, type: 'photo', category: 'new', user: '@synth_wave', avatar: 'https://picsum.photos/seed/synth/100', time: '5 hrs ago', caption: 'Modular rig powered up for late night jam.', imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80', likes: '1.8K', comments: '92', shares: '45', saves: '230' },
+      { id: 108, type: 'storyboard', category: 'trending', user: '@indie_dev_hub', avatar: 'https://picsum.photos/seed/dev/100', time: '6 hrs ago', caption: 'Why we shifted away from cloud platforms to self-hosted node tech.', likes: '3.9K', comments: '230', shares: '410', saves: '890', slides: [{ type: 'text', content: '1. Zero platform lock-in.', bg: '#2563eb' }, { type: 'text', content: '2. Total data sovereignty.', bg: '#d97706' }, { type: 'text', content: '3. Predictable infrastructure costs.', bg: '#dc2626' }] },
+      { id: 109, type: 'audio', category: 'rising', user: '@lofi_journal', avatar: 'https://picsum.photos/seed/lofi/100', time: '7 hrs ago', caption: 'Rain outside studio + fender rhodes keys.', duration: '1:12', likes: '2.9K', comments: '115', shares: '98', saves: '420' },
+      { id: 110, type: 'short', category: 'new', user: '@skate_chronicles', avatar: 'https://picsum.photos/seed/skate/100', time: '8 hrs ago', caption: 'Clean kickflip off 6-block stair set.', videoBg: 'linear-gradient(135deg, #065f46 0%, #047857 100%)', likes: '6.2K', comments: '180', shares: '340', saves: '210' },
+      { id: 111, type: 'text', category: 'trending', user: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', time: '9 hrs ago', text: 'If you want longevity in art, build your own distribution channels. Never rely on algorithm favors.', likes: '4.8K', comments: '390', shares: '810', saves: '1.4K' },
+      { id: 112, type: 'photo', category: 'rising', user: '@urban_arch', avatar: 'https://picsum.photos/seed/arch/100', time: '10 hrs ago', caption: 'Brutalist concrete reflections in Berlin.', imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=80', likes: '2.1K', comments: '64', shares: '38', saves: '190' },
+      { id: 113, type: 'audio', category: 'new', user: '@podcast_leak', avatar: 'https://picsum.photos/seed/pod/100', time: '11 hrs ago', caption: 'Unreleased interview regarding web decentralization.', duration: '2:05', likes: '1.4K', comments: '98', shares: '160', saves: '310' },
+      { id: 114, type: 'storyboard', category: 'trending', user: '@chess_tactics', avatar: 'https://picsum.photos/seed/chess/100', time: '12 hrs ago', caption: 'Defensive King Safety & Counter Pressure setup.', likes: '2.8K', comments: '175', shares: '220', saves: '640', slides: [{ type: 'text', content: 'Step 1: Solidify king fortress.', bg: '#374151' }, { type: 'text', content: 'Step 2: Bait center pawn push.', bg: '#4b5563' }, { type: 'text', content: 'Step 3: Flank attack on open c-file.', bg: '#1f2937' }] },
+      { id: 115, type: 'short', category: 'rising', user: '@street_art_world', avatar: 'https://picsum.photos/seed/mural/100', time: '13 hrs ago', caption: 'Time-lapse mural painting on brick wall.', videoBg: 'linear-gradient(135deg, #7c2d12 0%, #9a3412 100%)', likes: '8.1K', comments: '410', shares: '920', saves: '1.8K' },
+      { id: 116, type: 'text', category: 'new', user: '@hardware_geek', avatar: 'https://picsum.photos/seed/chip/100', time: '14 hrs ago', text: 'RISC-V chips are getting terrifyingly fast. The future of open hardware is here.', likes: '1.9K', comments: '142', shares: '310', saves: '280' },
+      { id: 117, type: 'photo', category: 'trending', user: '@nature_macro', avatar: 'https://picsum.photos/seed/bug/100', time: '15 hrs ago', caption: 'Morning dew droplets on moss.', imageUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80', likes: '3.4K', comments: '82', shares: '74', saves: '410' },
+      { id: 118, type: 'audio', category: 'rising', user: '@vocal_booth', avatar: 'https://picsum.photos/seed/vocal/100', time: '16 hrs ago', caption: 'Harmonies layer arrangement testing.', duration: '0:45', likes: '2.2K', comments: '130', shares: '88', saves: '350' },
+      { id: 119, type: 'short', category: 'new', user: '@culinary_lab', avatar: 'https://picsum.photos/seed/cook/100', time: '17 hrs ago', caption: 'Searing dry-aged steak in cast iron.', videoBg: 'linear-gradient(135deg, #831843 0%, #9d174d 100%)', likes: '9.4K', comments: '510', shares: '1.1K', saves: '2.3K' },
+      { id: 120, type: 'text', category: 'trending', user: '@philosophy_now', avatar: 'https://picsum.photos/seed/think/100', time: '18 hrs ago', text: 'Freedom of speech is meaningless if platforms enforce invisible algorithmic shadowbans.', likes: '7.2K', comments: '690', shares: '1.8K', saves: '2.1K' }
     ];
 
-    /* STORY DOCK */
+    /* 20 UNIQUE DISCOVER FEED POSTS (ACCOUNTS YOU DON'T FOLLOW + FOLLOW BUTTON) */
+    const discoverFeedPosts = [
+      { id: 201, type: 'text', category: 'trending', user: '@crypto_leak', avatar: 'https://picsum.photos/seed/leak/100', time: '5 mins ago', text: 'Zero-knowledge proofs are fundamentally changing digital identity privacy forever.', likes: '4.2K', comments: '310', shares: '540', saves: '890' },
+      { id: 202, type: 'photo', category: 'rising', user: '@sahara_lens', avatar: 'https://picsum.photos/seed/desert/100', time: '18 mins ago', caption: 'Dunes under full moon in Morocco.', imageUrl: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&q=80', likes: '6.8K', comments: '142', shares: '310', saves: '950' },
+      { id: 203, type: 'storyboard', category: 'trending', user: '@startup_raw', avatar: 'https://picsum.photos/seed/start/100', time: '30 mins ago', caption: 'How we bootstrapped our startup to $10k MRR without VC funds.', likes: '8.9K', comments: '540', shares: '1.2K', saves: '3.4K', slides: [{ type: 'text', content: 'Phase 1: Build in public.', bg: '#4338ca' }, { type: 'text', content: 'Phase 2: Own direct email list.', bg: '#6d28d9' }, { type: 'text', content: 'Phase 3: Charge from day 1.', bg: '#047857' }] },
+      { id: 204, type: 'short', category: 'new', user: '@drift_masters', avatar: 'https://picsum.photos/seed/drift/100', time: '40 mins ago', caption: 'Tandem drift run down mountain pass.', videoBg: 'linear-gradient(135deg, #312e81 0%, #4338ca 100%)', likes: '12.4K', comments: '620', shares: '2.1K', saves: '1.8K' },
+      { id: 205, type: 'audio', category: 'rising', user: '@modular_pulse', avatar: 'https://picsum.photos/seed/pulse/100', time: '1 hr ago', caption: 'Generative ambient patch loop.', duration: '1:45', likes: '3.8K', comments: '190', shares: '210', saves: '670' },
+      { id: 206, type: 'text', category: 'new', user: '@ai_ethics_watch', avatar: 'https://picsum.photos/seed/ethics/100', time: '1.5 hrs ago', text: 'Why web scraping regulations will force platforms to switch to peer-to-peer protocols.', likes: '3.1K', comments: '240', shares: '410', saves: '520' },
+      { id: 207, type: 'photo', category: 'trending', user: '@iceland_wild', avatar: 'https://picsum.photos/seed/ice/100', time: '2 hrs ago', caption: 'Black sand beach in Vik under storm clouds.', imageUrl: 'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800&q=80', likes: '9.2K', comments: '210', shares: '480', saves: '1.2K' },
+      { id: 208, type: 'short', category: 'rising', user: '@gym_power', avatar: 'https://picsum.photos/seed/gym/100', time: '2.5 hrs ago', caption: '500lb deadlift pr attempt clean form.', videoBg: 'linear-gradient(135deg, #701a75 0%, #831843 100%)', likes: '15.1K', comments: '890', shares: '1.4K', saves: '890' },
+      { id: 209, type: 'audio', category: 'new', user: '@radio_libre', avatar: 'https://picsum.photos/seed/radio/100', time: '3 hrs ago', caption: 'Underground pirate radio broadcast snippet.', duration: '2:30', likes: '2.4K', comments: '150', shares: '310', saves: '450' },
+      { id: 210, type: 'storyboard', category: 'trending', user: '@future_tech', avatar: 'https://picsum.photos/seed/tech/100', time: '3.5 hrs ago', caption: 'Top 3 tech breakthroughs expected this decade.', likes: '7.4K', comments: '410', shares: '890', saves: '2.1K', slides: [{ type: 'text', content: '1. Solid-state EV batteries.', bg: '#b45309' }, { type: 'text', content: '2. On-device neural processing.', bg: '#0f766e' }, { type: 'text', content: '3. Decentralized social mesh networks.', bg: '#1d4ed8' }] },
+      { id: 211, type: 'text', category: 'rising', user: '@market_watch_anon', avatar: 'https://picsum.photos/seed/market/100', time: '4 hrs ago', text: 'Inflation metrics are lagging indicators. Watch raw commodity prices for true trend direction.', likes: '5.1K', comments: '380', shares: '720', saves: '1.1K' },
+      { id: 212, type: 'photo', category: 'new', user: '@astronomy_now', avatar: 'https://picsum.photos/seed/astro/100', time: '4.5 hrs ago', caption: 'Andromeda galaxy captured from desert observatory.', imageUrl: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=800&q=80', likes: '11.2K', comments: '320', shares: '1.1K', saves: '2.8K' },
+      { id: 213, type: 'short', category: 'trending', user: '@bmx_tricks', avatar: 'https://picsum.photos/seed/bmx/100', time: '5 hrs ago', caption: 'Flair off quarter pipe transfer.', videoBg: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)', likes: '8.4K', comments: '290', shares: '610', saves: '410' },
+      { id: 214, type: 'audio', category: 'rising', user: '@field_recordings', avatar: 'https://picsum.photos/seed/field/100', time: '5.5 hrs ago', caption: 'Thunderstorm inside pine forest binaural audio.', duration: '1:15', likes: '4.1K', comments: '160', shares: '190', saves: '890' },
+      { id: 215, type: 'text', category: 'new', user: '@decentral_news', avatar: 'https://picsum.photos/seed/p2p/100', time: '6 hrs ago', text: 'Peer-to-peer protocols ensure censorship-resistant speech. Build on open standards.', likes: '6.7K', comments: '420', shares: '1.3K', saves: '1.6K' },
+      { id: 216, type: 'photo', category: 'trending', user: '@kyoto_vibe', avatar: 'https://picsum.photos/seed/kyoto/100', time: '6.5 hrs ago', caption: 'Bamboo grove sunrise in Arashiyama.', imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80', likes: '7.8K', comments: '180', shares: '390', saves: '1.1K' },
+      { id: 217, type: 'storyboard', category: 'rising', user: '@web_security', avatar: 'https://picsum.photos/seed/sec/100', time: '7 hrs ago', caption: 'Essential steps to secure your personal hardware.', likes: '5.9K', comments: '310', shares: '740', saves: '1.9K', slides: [{ type: 'text', content: '1. Hardware security keys.', bg: '#991b1b' }, { type: 'text', content: '2. Encrypted DNS queries.', bg: '#854d0e' }, { type: 'text', content: '3. Air-gapped backups.', bg: '#166534' }] },
+      { id: 218, type: 'short', category: 'new', user: '@parkour_life', avatar: 'https://picsum.photos/seed/pk/100', time: '7.5 hrs ago', caption: 'Rooftop gap jump precision landing.', videoBg: 'linear-gradient(135deg, #3730a3 0%, #312e81 100%)', likes: '14.2K', comments: '780', shares: '1.9K', saves: '1.2K' },
+      { id: 219, type: 'audio', category: 'trending', user: '@jazz_sessions', avatar: 'https://picsum.photos/seed/jazz/100', time: '8 hrs ago', caption: 'Upright bass & saxophone improv.', duration: '2:10', likes: '5.2K', comments: '210', shares: '340', saves: '910' },
+      { id: 220, type: 'text', category: 'rising', user: '@free_thought', avatar: 'https://picsum.photos/seed/free/100', time: '9 hrs ago', text: 'You do not truly own your digital media unless you hold the private keys and direct file downloads.', likes: '9.8K', comments: '810', shares: '2.4K', saves: '3.1K' }
+    ];
+
+    /* REALISTIC COMMENT THREAD DATABASE */
+    const realisticComments = [
+      [ { user: '@bob', avatar: 'https://picsum.photos/seed/bob/100', text: 'This shit is insanely clean bro. Production level crazy 🔥' }, { user: '@mia', avatar: 'https://picsum.photos/seed/mia/100', text: 'Finally a platform where posts don’t feel algorithm forced.' }, { user: '@dave_99', avatar: 'https://picsum.photos/seed/dave/100', text: 'Real talk, this mix hits different on proper speakers.' } ],
+      [ { user: '@alex_k', avatar: 'https://picsum.photos/seed/alex/100', text: 'Nah fr though, people underestimate how big open hardware is gonna be.' }, { user: '@sara', avatar: 'https://picsum.photos/seed/sara/100', text: 'Facts. Proprietary lock-in is dying out fast.' } ],
+      [ { user: '@jordan_r', avatar: 'https://picsum.photos/seed/jordan/100', text: 'Bro this angle is wild haha, camera settings?' }, { user: '@kenji_explores', avatar: 'https://picsum.photos/seed/tokyo/100', text: '35mm prime f/1.4 wide open!' } ],
+      [ { user: '@sam_t', avatar: 'https://picsum.photos/seed/sam/100', text: 'People keep sleeping on this topic smh.' }, { user: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', text: 'They’ll wake up when central systems drop out again 🤷‍♂️' } ]
+    ];
+
+    /* 20 STORY ACCOUNTS FOR DOCK & 9:16 VIEWER */
+    const storyAccounts = [
+      { user: '@tecuani', avatar: 'https://picsum.photos/seed/tecuani_main/200', category: 'new', time: '10m ago', text: 'In the studio cooking track 4 beat snippet 🎙️' },
+      { user: '@kenji_explores', avatar: 'https://picsum.photos/seed/tokyo/100', category: 'new', time: '25m ago', text: 'Shinjuku neon reflections 🌧️📷' },
+      { user: '@cyber_freedom', avatar: 'https://picsum.photos/seed/cyber/100', category: 'new', time: '1h ago', text: 'Node sync complete. LibreNet mesh node live 🌐' },
+      { user: '@beat_architect', avatar: 'https://picsum.photos/seed/beat/100', category: 'earlier', time: '3h ago', text: 'Chopping up rare vinyl find 🎛️' },
+      { user: '@news_unfiltered', avatar: 'https://picsum.photos/seed/news/100', category: 'earlier', time: '4h ago', text: 'Press release verification in progress 📰' },
+      { user: '@synth_wave', avatar: 'https://picsum.photos/seed/synth/100', category: 'earlier', time: '5h ago', text: 'Analog synth patch warm up 🎹' },
+      { user: '@indie_dev_hub', avatar: 'https://picsum.photos/seed/dev/100', category: 'earlier', time: '6h ago', text: 'Deploying v1.0.4 update code 💻' },
+      { user: '@lofi_journal', avatar: 'https://picsum.photos/seed/lofi/100', category: 'yesterday', time: 'Yesterday', text: 'Midnight tape deck session 📼' },
+      { user: '@skate_chronicles', avatar: 'https://picsum.photos/seed/skate/100', category: 'yesterday', time: 'Yesterday', text: 'Spot checking downtown rails 🛹' },
+      { user: '@urban_arch', avatar: 'https://picsum.photos/seed/arch/100', category: 'yesterday', time: 'Yesterday', text: 'Concrete brutalism study 🏢' },
+      { user: '@chess_tactics', avatar: 'https://picsum.photos/seed/chess/100', category: 'yesterday', time: 'Yesterday', text: 'Blitz tournament round 5 ♟️' },
+      { user: '@crypto_leak', avatar: 'https://picsum.photos/seed/leak/100', category: 'yesterday', time: 'Yesterday', text: 'Zero knowledge cryptographic proof 🔑' },
+      { user: '@drift_masters', avatar: 'https://picsum.photos/seed/drift/100', category: 'yesterday', time: 'Yesterday', text: 'Tire smoke behind mountain pass 🏎️' },
+      { user: '@modular_pulse', avatar: 'https://picsum.photos/seed/pulse/100', category: 'yesterday', time: 'Yesterday', text: 'Eurorack voltage control 🎚️' },
+      { user: '@iceland_wild', avatar: 'https://picsum.photos/seed/ice/100', category: 'yesterday', time: 'Yesterday', text: 'Glacier lagoon sunrise 🧊' },
+      { user: '@gym_power', avatar: 'https://picsum.photos/seed/gym/100', category: 'yesterday', time: 'Yesterday', text: 'Heavy squat session 🏋️' },
+      { user: '@radio_libre', avatar: 'https://picsum.photos/seed/radio/100', category: 'yesterday', time: 'Yesterday', text: 'Pirate radio frequencies live 📻' },
+      { user: '@astronomy_now', avatar: 'https://picsum.photos/seed/astro/100', category: 'yesterday', time: 'Yesterday', text: 'Milkyway core exposure 🌌' },
+      { user: '@parkour_life', avatar: 'https://picsum.photos/seed/pk/100', category: 'yesterday', time: 'Yesterday', text: 'Cat leap precision testing 🏃' },
+      { user: '@free_thought', avatar: 'https://picsum.photos/seed/free/100', category: 'yesterday', time: 'Yesterday', text: 'Direct P2P network test successful ✊' }
+    ];
+
+    let currentStoryIndex = 0;
     let currentStoryMode = 'creator';
+    let storyTimer = null;
+
+    /* RENDER DOCK STORIES */
+    function renderStoryDock() {
+      const container = document.getElementById('story-row-main');
+      container.innerHTML = '';
+      storyAccounts.slice(0, 8).forEach((st, idx) => {
+        container.innerHTML += `
+          <div class="story-avatar-item" onclick="openStoryViewer(${idx})">
+            <div class="avatar-ring"><img src="${st.avatar}" class="avatar-img"></div>
+            <span class="story-username">${st.user.replace('@','')}</span>
+          </div>
+        `;
+      });
+      container.innerHTML += `<button class="more-stories-btn" onclick="toggleStoryDrawer(true)">+12</button>`;
+    }
+
     function setStoryMode(mode) {
       currentStoryMode = mode;
       document.getElementById('btn-mode-creator').classList.toggle('active', mode === 'creator');
@@ -1406,23 +1537,86 @@
     function renderStoryDrawerContent() {
       const container = document.getElementById('drawer-content-area');
       if(currentStoryMode === 'creator') {
-        container.innerHTML = `
-          <div class="drawer-section-label">New Today</div>
-          <div class="drawer-scroll-row">
-            <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0); toggleStoryDrawer(false);"><div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img"></div><span class="story-username">Alice</span></div>
-            <div class="story-avatar-item" onclick="openStoryViewer('Bob', 0); toggleStoryDrawer(false);"><div class="avatar-ring"><img src="https://picsum.photos/seed/bob/100" class="avatar-img"></div><span class="story-username">Bob</span></div>
-          </div>`;
+        const newToday = storyAccounts.filter(s => s.category === 'new');
+        const earlier = storyAccounts.filter(s => s.category === 'earlier');
+        const yesterday = storyAccounts.filter(s => s.category === 'yesterday');
+
+        let html = `<div class="drawer-section-label">New Today</div><div class="drawer-scroll-row">`;
+        newToday.forEach(s => {
+          let idx = storyAccounts.indexOf(s);
+          html += `<div class="story-avatar-item" onclick="openStoryViewer(${idx}); toggleStoryDrawer(false);"><div class="avatar-ring"><img src="${s.avatar}" class="avatar-img"></div><span class="story-username">${s.user.replace('@','')}</span></div>`;
+        });
+        html += `</div><div class="drawer-section-label">Earlier Today</div><div class="drawer-scroll-row">`;
+        earlier.forEach(s => {
+          let idx = storyAccounts.indexOf(s);
+          html += `<div class="story-avatar-item" onclick="openStoryViewer(${idx}); toggleStoryDrawer(false);"><div class="avatar-ring"><img src="${s.avatar}" class="avatar-img"></div><span class="story-username">${s.user.replace('@','')}</span></div>`;
+        });
+        html += `</div><div class="drawer-section-label">Yesterday</div><div class="drawer-scroll-row">`;
+        yesterday.forEach(s => {
+          let idx = storyAccounts.indexOf(s);
+          html += `<div class="story-avatar-item" onclick="openStoryViewer(${idx}); toggleStoryDrawer(false);"><div class="avatar-ring seen"><img src="${s.avatar}" class="avatar-img"></div><span class="story-username">${s.user.replace('@','')}</span></div>`;
+        });
+        html += `</div>`;
+        container.innerHTML = html;
       } else {
-        container.innerHTML = `
-          <div class="drawer-section-label">Chronological Event Timeline</div>
-          <div class="drawer-scroll-row">
-            <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0); toggleStoryDrawer(false);"><div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img"></div><span class="story-username">Alice</span><span class="story-timestamp-sub">9:02 AM</span></div>
-          </div>`;
+        let html = `<div class="drawer-section-label">Chronological Event Timeline</div><div class="drawer-scroll-row">`;
+        storyAccounts.forEach((s, idx) => {
+          html += `<div class="story-avatar-item" onclick="openStoryViewer(${idx}); toggleStoryDrawer(false);"><div class="avatar-ring"><img src="${s.avatar}" class="avatar-img"></div><span class="story-username">${s.user.replace('@','')}</span><span class="story-timestamp-sub">${s.time}</span></div>`;
+        });
+        html += `</div>`;
+        container.innerHTML = html;
       }
     }
 
-    /* RENDER CARD CONTENT HELPER */
-    function buildPostHTML(post) {
+    /* 9:16 STORY VIEWER SYSTEM */
+    function openStoryViewer(idx) {
+      currentStoryIndex = idx;
+      const modal = document.getElementById('story-viewer-modal');
+      modal.classList.add('active');
+      renderStoryFrame();
+    }
+
+    function closeStoryViewer() {
+      document.getElementById('story-viewer-modal').classList.remove('active');
+      if(storyTimer) clearTimeout(storyTimer);
+    }
+
+    function renderStoryFrame() {
+      if(storyTimer) clearTimeout(storyTimer);
+      const st = storyAccounts[currentStoryIndex];
+      if(!st) { closeStoryViewer(); return; }
+
+      document.getElementById('story-viewer-avatar').src = st.avatar;
+      document.getElementById('story-viewer-username').innerText = st.user;
+      document.getElementById('story-viewer-time').innerText = st.time;
+
+      const progressContainer = document.getElementById('story-progress-container');
+      progressContainer.innerHTML = `<div class="story-progress-track"><div class="story-progress-fill running"></div></div>`;
+
+      const mediaContainer = document.getElementById('story-media-content');
+      mediaContainer.innerHTML = `
+        <div style="padding:40px 24px; text-align:center; font-size:1.4rem; font-weight:800; color:#fff; background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%); width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+          ${st.text}
+        </div>
+      `;
+
+      storyTimer = setTimeout(() => {
+        storyNavigate(1);
+      }, 15000); // 15 SECONDS DURATION
+    }
+
+    function storyNavigate(direction) {
+      currentStoryIndex += direction;
+      if(currentStoryIndex < 0) currentStoryIndex = 0;
+      if(currentStoryIndex >= storyAccounts.length) {
+        closeStoryViewer();
+      } else {
+        renderStoryFrame();
+      }
+    }
+
+    /* RENDER POST BUILDER HELPER */
+    function buildPostHTML(post, isDiscover = false) {
       let badgeHtml = '';
       if (post.type === 'storyboard') badgeHtml += `<span class="post-badge badge-storyboard">Storyboard</span> `;
       else if (post.type === 'short') badgeHtml += `<span class="post-badge badge-short">Short</span> `;
@@ -1431,14 +1625,19 @@
       else if (post.type === 'text') badgeHtml += `<span class="post-badge badge-text">Text</span> `;
 
       let labelIcon = post.category === 'trending' ? '🔥' : (post.category === 'rising' ? '📈' : '⏱️');
-      badgeHtml += `<span class="badge-disc-emoji disc-only-label" style="display: none;">${labelIcon}</span>`;
+      badgeHtml += `<span class="badge-disc-emoji disc-only-label" style="display: ${isDiscover ? 'inline-block' : 'none'};">${labelIcon}</span>`;
+
+      let followBtn = isDiscover ? `<button class="follow-disc-btn" onclick="event.stopPropagation(); toggleFollowBtn(this)">+ Follow</button>` : '';
 
       let mediaBodyHtml = '';
 
       if (post.type === 'storyboard') {
-        let dots = post.slides.map((_, i) => `<div class="dot-step ${i===0?'active':''}"></div>`).join('');
+        slideState[post.id] = slideState[post.id] || 0;
+        let activeIdx = slideState[post.id];
+
+        let dots = post.slides.map((_, i) => `<div class="dot-step ${i===activeIdx?'active':''}"></div>`).join('');
         let slideItems = post.slides.map((slide, i) => {
-          let active = i === 0 ? 'active' : '';
+          let active = i === activeIdx ? 'active' : '';
           if(slide.type === 'text') {
             return `<div class="slide-item ${active}"><div class="slide-text-card" style="background: ${slide.bg}"><span>${slide.content}</span></div></div>`;
           } else if(slide.type === 'image') {
@@ -1449,6 +1648,8 @@
         mediaBodyHtml = `
           <div class="storyboard-viewport" id="sb-viewport-${post.id}">
             <div class="storyboard-nav-dots">${dots}</div>
+            <div class="storyboard-tap-left" onclick="event.stopPropagation(); navStoryboard(${post.id}, -1)"></div>
+            <div class="storyboard-tap-right" onclick="event.stopPropagation(); navStoryboard(${post.id}, 1)"></div>
             ${slideItems}
           </div>
         `;
@@ -1459,7 +1660,6 @@
       } else if (post.type === 'short') {
         mediaBodyHtml = `<div class="video-card-preview" style="background: ${post.videoBg}"><div class="video-play-badge">▶ BEACON SHORT</div></div>`;
       } else if (post.type === 'audio') {
-        /* COMPACT TELEGRAM STYLE AUDIO WAVE PLAYER */
         mediaBodyHtml = `
           <div class="audio-card-compact">
             <button class="audio-play-btn" onclick="event.stopPropagation();">▶</button>
@@ -1494,7 +1694,10 @@
           <div class="post-user" onclick="event.stopPropagation(); openUserProfile('${post.user}')">
             <img src="${post.avatar}" class="post-user-img">
             <div>
-              <div class="post-username">${post.user}</div>
+              <div style="display:flex; align-items:center;">
+                <span class="post-username">${post.user}</span>
+                ${followBtn}
+              </div>
               <div style="font-size: 0.7rem; color: var(--text-muted);">${post.time}</div>
             </div>
           </div>
@@ -1505,47 +1708,91 @@
           <div class="action-group">
             <button class="action-icon-btn" onclick="event.stopPropagation(); toggleLike(this)"><span class="icon">🤍</span> <span class="count">${post.likes}</span></button>
             <button class="action-icon-btn">💬 <span>${post.comments}</span></button>
-            <button class="action-icon-btn">🔄</button>
-            <button class="action-icon-btn">🔖</button>
+            <button class="action-icon-btn">🔄 <span>${post.shares || '12'}</span></button>
+            <button class="action-icon-btn">🔖 <span>${post.saves || '45'}</span></button>
           </div>
         </div>
         ${post.caption ? `<div class="post-caption-block"><strong onclick="event.stopPropagation(); openUserProfile('${post.user}')" style="cursor:pointer;">${post.user}</strong> ${post.caption}</div>` : ''}
       `;
     }
 
+    function navStoryboard(postId, dir) {
+      const post = [...homeFeedPosts, ...discoverFeedPosts].find(p => p.id === postId);
+      if(!post || !post.slides) return;
+      slideState[postId] = (slideState[postId] || 0) + dir;
+      if(slideState[postId] < 0) slideState[postId] = 0;
+      if(slideState[postId] >= post.slides.length) slideState[postId] = post.slides.length - 1;
+
+      const viewport = document.getElementById(`sb-viewport-${postId}`);
+      if(viewport) {
+        const dots = viewport.querySelectorAll('.dot-step');
+        dots.forEach((d, i) => d.classList.toggle('active', i === slideState[postId]));
+        const items = viewport.querySelectorAll('.slide-item');
+        items.forEach((item, i) => item.classList.toggle('active', i === slideState[postId]));
+      }
+    }
+
+    function toggleFollowBtn(btn) {
+      if(btn.classList.contains('following')) {
+        btn.classList.remove('following');
+        btn.innerText = '+ Follow';
+      } else {
+        btn.classList.add('following');
+        btn.innerText = 'Following';
+      }
+    }
+
     /* RENDER FEED ENGINE */
-    function renderFeed(postsArray, containerId = 'feed-container', append = false) {
+    function renderFeed(postsArray, containerId = 'feed-container', isDiscover = false) {
       const container = document.getElementById(containerId);
-      if(!append) container.innerHTML = '';
+      container.innerHTML = '';
 
       postsArray.forEach(post => {
         const article = document.createElement('article');
         article.className = 'post-card';
         article.dataset.category = post.category;
         article.onclick = (e) => {
-          if(!e.target.closest('.post-user')) {
-            openFullscreenPost(post);
+          if(!e.target.closest('.post-user') && !e.target.closest('.action-icon-btn') && !e.target.closest('.storyboard-tap-left') && !e.target.closest('.storyboard-tap-right')) {
+            openFullscreenPost(post, isDiscover);
           }
         };
 
-        article.innerHTML = buildPostHTML(post);
+        article.innerHTML = buildPostHTML(post, isDiscover);
         container.appendChild(article);
       });
     }
 
-    /* FULLSCREEN POST THREAD MODAL */
-    function openFullscreenPost(post) {
+    /* FULLSCREEN POST THREAD MODAL WITH DYNAMIC COMMENTS */
+    function openFullscreenPost(post, isDiscover = false) {
       const modal = document.getElementById('fullscreen-post-modal');
       const body = document.getElementById('full-post-content-body');
+      const commentsBox = document.getElementById('full-post-comments-container');
       body.innerHTML = '';
       
       const card = document.createElement('div');
       card.className = 'post-card';
       card.style.border = 'none';
       card.style.borderRadius = '0';
-      card.innerHTML = buildPostHTML(post);
+      card.innerHTML = buildPostHTML(post, isDiscover);
 
       body.appendChild(card);
+
+      /* RENDER REALISTIC COMMENTS */
+      const commentThread = realisticComments[post.id % realisticComments.length];
+      let commentsHtml = `<h4 style="font-size: 0.9rem; color: var(--text-muted);">Conversations (${commentThread.length})</h4>`;
+      commentThread.forEach(c => {
+        commentsHtml += `
+          <div class="comment-item">
+            <img src="${c.avatar}" class="comment-avatar">
+            <div class="comment-box">
+              <strong>${c.user}</strong>
+              <p style="margin-top: 4px; color: var(--text-main);">${c.text}</p>
+            </div>
+          </div>
+        `;
+      });
+      commentsBox.innerHTML = commentsHtml;
+
       modal.classList.add('active');
     }
 
@@ -1553,7 +1800,7 @@
       document.getElementById('fullscreen-post-modal').classList.remove('active');
     }
 
-    /* PROFILE ROUTER WITH MENU / FLOATING BUTTON CONTROL */
+    /* PROFILE ROUTER WITH SCROLL RESET */
     function openUserProfile(handle) {
       activeProfileHandle = handle;
       const data = profilesDB[handle] || { name: handle.replace('@', ''), handle: handle, avatar: `https://picsum.photos/seed/${handle}/200`, posts: '12', followers: '1.1K', following: '98', bio: 'Independent creator on Beacon LibreNet.' };
@@ -1566,7 +1813,6 @@
       document.getElementById('prof-stat-following').innerText = data.following;
       document.getElementById('prof-bio').innerText = data.bio;
 
-      /* MENU AND CREATE BUTTON VISIBLE ONLY ON OWN PROFILE */
       const isOwnProfile = (handle === '@tecuani');
       updateOwnProfileControls(isOwnProfile);
 
@@ -1598,9 +1844,9 @@
       document.querySelectorAll('.prof-tab-btn').forEach(b => b.classList.remove('active'));
       if(btn) btn.classList.add('active');
 
-      const userPosts = postDatabase.filter(p => p.user === activeProfileHandle);
+      const userPosts = [...homeFeedPosts, ...discoverFeedPosts].filter(p => p.user === activeProfileHandle);
 
-      if(tab === 'posts') renderFeed(userPosts.length ? userPosts : postDatabase.slice(0,2), 'profile-feed-container');
+      if(tab === 'posts') renderFeed(userPosts.length ? userPosts : homeFeedPosts.slice(0,3), 'profile-feed-container');
       else if(tab === 'shorts') renderFeed(userPosts.filter(p => p.type === 'short'), 'profile-feed-container');
       else if(tab === 'audio') renderFeed(userPosts.filter(p => p.type === 'audio'), 'profile-feed-container');
       else if(tab === 'stickers') {
@@ -1626,8 +1872,10 @@
     function openMsgRequestModal() { document.getElementById('msg-request-modal').classList.add('active'); }
     function closeMsgRequestModal() { document.getElementById('msg-request-modal').classList.remove('active'); }
 
-    /* MAIN TAB SWITCHING */
+    /* MAIN TAB SWITCHING WITH STRICT SCROLL RESET */
     function switchMainTab(tab) {
+      window.scrollTo(0, 0); // RESET PAGE SCROLL TO TOP ALWAYS
+
       const navHome = document.getElementById('nav-home');
       const navDisc = document.getElementById('nav-discover');
       const navProf = document.getElementById('nav-profile');
@@ -1635,12 +1883,11 @@
       const profView = document.getElementById('profile-view');
       const storyDock = document.getElementById('main-story-dock');
       const discSubtabs = document.getElementById('discover-subtabs');
-      const discLabels = document.querySelectorAll('.disc-only-label');
 
       [navHome, navDisc, navProf].forEach(n => n && n.classList.remove('active'));
 
       if(tab === 'home' || tab === 'discover') {
-        updateOwnProfileControls(false); // HIDE MENU & + BUTTON ON HOME & DISCOVER
+        updateOwnProfileControls(false);
       }
 
       if(tab === 'home') {
@@ -1649,16 +1896,14 @@
         profView.classList.remove('active');
         storyDock.style.display = 'block';
         discSubtabs.style.display = 'none';
-        discLabels.forEach(lbl => lbl.style.display = 'none');
-        showAllPosts();
+        renderFeed(homeFeedPosts, 'feed-container', false);
       } else if(tab === 'discover') {
         navDisc.classList.add('active');
         mainFeed.style.display = 'flex';
         profView.classList.remove('active');
         storyDock.style.display = 'none';
         discSubtabs.style.display = 'flex';
-        discLabels.forEach(lbl => lbl.style.display = 'inline-block');
-        filterDiscover('all', document.querySelector('.disc-tab-btn'));
+        renderFeed(discoverFeedPosts, 'feed-container', true);
       } else if(tab === 'profile') {
         navProf.classList.add('active');
         mainFeed.style.display = 'none';
@@ -1682,26 +1927,25 @@
       });
     }
 
-    function showAllPosts() {
-      document.querySelectorAll('#feed-container .post-card').forEach(p => p.style.display = 'block');
-    }
-
     function toggleLike(btn) {
       const icon = btn.querySelector('.icon');
       const countSpan = btn.querySelector('.count');
-      let count = parseInt(countSpan.innerText.replace(',', ''));
+      let textVal = countSpan.innerText.replace('K', '');
+      let isK = countSpan.innerText.includes('K');
+      let count = parseFloat(textVal);
+
       if(icon.innerText === '🤍') {
         icon.innerText = '❤️';
-        countSpan.innerText = (count + 1).toLocaleString();
+        countSpan.innerText = isK ? (count + 0.1).toFixed(1) + 'K' : (Math.round(count) + 1);
       } else {
         icon.innerText = '🤍';
-        countSpan.innerText = (count - 1).toLocaleString();
+        countSpan.innerText = isK ? (count - 0.1).toFixed(1) + 'K' : (Math.round(count) - 1);
       }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      renderStoryDock();
       switchMainTab('home');
-      renderFeed(postDatabase, 'feed-container');
     });
   </script>
 </body>
