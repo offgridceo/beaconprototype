@@ -283,7 +283,6 @@
       font-weight: 700;
     }
 
-    /* Horizontal scroll for drawer categories */
     .drawer-scroll-row {
       display: flex;
       gap: 16px;
@@ -524,7 +523,6 @@
       font-size: 0.85rem;
     }
 
-    /* Vista Call to Action Slide */
     .vista-cta-card {
       width: 100%;
       height: 100%;
@@ -591,7 +589,6 @@
     .sb-btn-left { left: 10px; }
     .sb-btn-right { right: 10px; }
 
-    /* POST ACTIONS */
     .post-actions {
       display: flex;
       justify-content: space-between;
@@ -627,7 +624,6 @@
       line-height: 1.4;
     }
 
-    /* Video player simulation block */
     .video-card-preview {
       aspect-ratio: 4/5;
       width: 100%;
@@ -650,6 +646,250 @@
       font-size: 1.5rem;
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    /* ================= PROFILE LAYOUT STYLES ================= */
+    .profile-container {
+      display: none;
+      flex-direction: column;
+      background: var(--bg-dark);
+    }
+    .profile-container.active { display: flex; }
+
+    .profile-header-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 20px 16px 20px;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .profile-hero-avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: var(--radius-full);
+      padding: 3px;
+      background: var(--accent-gradient);
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: transform 0.2s ease;
+    }
+    .profile-hero-avatar:hover { transform: scale(1.03); }
+
+    .profile-hero-img {
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-full);
+      object-fit: cover;
+      border: 3px solid var(--card-bg);
+    }
+
+    .profile-display-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .profile-handle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      opacity: 0.85;
+      margin-bottom: 18px;
+    }
+
+    .profile-stats-strip {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      max-width: 360px;
+      padding: 12px 0;
+      background: var(--surface-elevated);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 18px;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-num {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .stat-lbl {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .profile-action-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 360px;
+      margin-bottom: 18px;
+    }
+
+    .btn-follow {
+      flex: 1;
+      background: var(--accent-primary);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-follow.following { background: var(--surface-elevated); border: 1px solid var(--border-color); color: var(--text-main); }
+
+    .btn-sparks {
+      flex: 1;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      padding: 10px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-msg-request {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-full);
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .profile-bio {
+      font-size: 0.85rem;
+      line-height: 1.45;
+      color: var(--text-main);
+      max-width: 380px;
+      padding: 0 10px;
+    }
+
+    /* PROFILE NAVIGATION TABS */
+    .profile-tabs-bar {
+      display: flex;
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 57px;
+      z-index: 30;
+    }
+
+    .prof-tab-btn {
+      flex: 1;
+      padding: 12px 0;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .prof-tab-btn.active {
+      color: var(--accent-primary);
+      border-bottom-color: var(--accent-primary);
+    }
+
+    /* STICKERS GRID */
+    .stickers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .sticker-item {
+      aspect-ratio: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      padding: 12px;
+      cursor: pointer;
+    }
+    .sticker-name { font-size: 0.68rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
+
+    /* TELEGRAM STYLE AVATAR EXPANSION MODAL */
+    .avatar-expansion-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 150;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+    .avatar-expansion-modal.active { display: flex; }
+
+    .avatar-expanded-img {
+      max-width: 90%;
+      max-height: 60vh;
+      object-fit: contain;
+      border-radius: var(--radius-lg);
+      margin: auto;
+    }
+
+    /* ANTI SPAM REQUEST MODAL */
+    .msg-request-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 150;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .msg-request-modal.active { display: flex; }
+
+    .request-box {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     /* FOOTER / NAVIGATION */
@@ -806,8 +1046,8 @@
       <button class="desktop-nav-btn" id="desk-nav-discover" onclick="switchMainTab('discover')">
         🧭 Discover
       </button>
-      <button class="desktop-nav-btn" style="opacity: 0.5; cursor: not-allowed;">
-        👤 Profile (Next)
+      <button class="desktop-nav-btn" id="desk-nav-profile" onclick="switchMainTab('profile')">
+        👤 Profile
       </button>
     </nav>
   </aside>
@@ -825,9 +1065,8 @@
       </div>
     </header>
 
-    <!-- STORY DOCK -->
-    <section class="story-dock-wrapper">
-      <!-- Scrollable Row (Creator Mode Default) -->
+    <!-- STORY DOCK (VISIBLE IN HOME/DISCOVER VIEWS) -->
+    <section class="story-dock-wrapper" id="main-story-dock">
       <div class="story-scroll-container" id="story-row-creator">
         <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0)">
           <div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img" alt="Alice"></div>
@@ -849,12 +1088,9 @@
           <div class="avatar-ring seen"><img src="https://picsum.photos/seed/emma/100" class="avatar-img" alt="Emma"></div>
           <span class="story-username">Emma</span>
         </div>
-        
-        <!-- Expand Drawer Button -->
         <button class="more-stories-btn" onclick="toggleStoryDrawer(true)">+37</button>
       </div>
 
-      <!-- Scrollable Row (Timeline Mode) -->
       <div class="story-scroll-container" id="story-row-timeline" style="display: none;">
         <div class="timeline-item-card" onclick="openStoryViewer('Alice (9:02 AM)', 0)">
           <span class="timeline-time">9:02 AM</span>
@@ -868,16 +1104,11 @@
           <span class="timeline-time">9:06 AM</span>
           <span style="font-size: 0.78rem; font-weight: 600;">Carlos</span>
         </div>
-        <div class="timeline-item-card" onclick="openStoryViewer('Alice (9:08 AM)', 1)">
-          <span class="timeline-time">9:08 AM</span>
-          <span style="font-size: 0.78rem; font-weight: 600;">Alice</span>
-        </div>
       </div>
 
       <!-- EXPANDABLE STORY DRAWER (+37) -->
       <div class="story-drawer" id="story-drawer">
         <div class="drawer-header">
-          <!-- Creator vs Timeline Mode Toggle (Inside Drawer) -->
           <div class="view-mode-toggle">
             <button class="toggle-btn active" id="btn-mode-creator" onclick="setStoryMode('creator')">Creator</button>
             <button class="toggle-btn" id="btn-mode-timeline" onclick="setStoryMode('timeline')">Timeline</button>
@@ -898,49 +1129,7 @@
             <div class="avatar-ring"><img src="https://picsum.photos/seed/mia/100" class="avatar-img"></div>
             <span class="story-username">Mia</span>
           </div>
-          <div class="story-avatar-item" onclick="openStoryViewer('Leo', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring"><img src="https://picsum.photos/seed/leo/100" class="avatar-img"></div>
-            <span class="story-username">Leo</span>
-          </div>
-          <div class="story-avatar-item" onclick="openStoryViewer('Sofia', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring"><img src="https://picsum.photos/seed/sofia/100" class="avatar-img"></div>
-            <span class="story-username">Sofia</span>
-          </div>
         </div>
-
-        <div class="drawer-section-label">Earlier Today</div>
-        <div class="drawer-scroll-row">
-          <div class="story-avatar-item" onclick="openStoryViewer('Carlos', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring"><img src="https://picsum.photos/seed/carlos/100" class="avatar-img"></div>
-            <span class="story-username">Carlos</span>
-          </div>
-          <div class="story-avatar-item" onclick="openStoryViewer('Emma', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring"><img src="https://picsum.photos/seed/emma/100" class="avatar-img"></div>
-            <span class="story-username">Emma</span>
-          </div>
-          <div class="story-avatar-item" onclick="openStoryViewer('David', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring"><img src="https://picsum.photos/seed/david/100" class="avatar-img"></div>
-            <span class="story-username">David</span>
-          </div>
-        </div>
-
-        <div class="drawer-section-label">Yesterday</div>
-        <div class="drawer-scroll-row">
-          <div class="story-avatar-item" onclick="openStoryViewer('Noah', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring seen"><img src="https://picsum.photos/seed/noah/100" class="avatar-img"></div>
-            <span class="story-username">Noah</span>
-          </div>
-          <div class="story-avatar-item" onclick="openStoryViewer('Ava', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring seen"><img src="https://picsum.photos/seed/ava/100" class="avatar-img"></div>
-            <span class="story-username">Ava</span>
-          </div>
-          <div class="story-avatar-item" onclick="openStoryViewer('Liam', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring seen"><img src="https://picsum.photos/seed/liam/100" class="avatar-img"></div>
-            <span class="story-username">Liam</span>
-          </div>
-        </div>
-
-        <!-- Thumb-Accessible Close Button at Bottom -->
         <div class="drawer-footer">
           <button class="close-drawer-btn" onclick="toggleStoryDrawer(false)">Close ✕</button>
         </div>
@@ -954,9 +1143,65 @@
       <button class="disc-tab-btn" onclick="filterDiscover('rising', this)">📈 Rising</button>
     </div>
 
-    <!-- MAIN CONTENT FEED -->
+    <!-- HOME / DISCOVER MAIN CONTENT FEED -->
     <section class="feed-container" id="feed-container">
-      <!-- Posts dynamically generated via Javascript below -->
+      <!-- Posts dynamically generated via Javascript -->
+    </section>
+
+    <!-- USER PROFILE CONTAINER (HIDDEN BY DEFAULT) -->
+    <section class="profile-container" id="profile-view">
+      <!-- PROFILE HEADER CARD -->
+      <div class="profile-header-card">
+        
+        <!-- Telegram-Style Hero Avatar -->
+        <div class="profile-hero-avatar" onclick="openAvatarExpansion()">
+          <img src="https://picsum.photos/seed/tecuani_main/200" id="current-hero-img" class="profile-hero-img" alt="Tonatecuani">
+        </div>
+
+        <h1 class="profile-display-name">Tonatecuani</h1>
+        <div class="profile-handle">@tecuani</div>
+
+        <!-- Balanced Stats Strip -->
+        <div class="profile-stats-strip">
+          <div class="stat-box">
+            <span class="stat-num">48</span>
+            <span class="stat-lbl">Posts</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">14.2K</span>
+            <span class="stat-lbl">Followers</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">380</span>
+            <span class="stat-lbl">Following</span>
+          </div>
+        </div>
+
+        <!-- Action Row (Follow, Sparks Tip, DM Request) -->
+        <div class="profile-action-row">
+          <button class="btn-follow" id="prof-follow-btn" onclick="toggleFollow(this)">Follow</button>
+          <button class="btn-sparks" onclick="openSparksModal()">⚡ Send Sparks</button>
+          <button class="btn-msg-request" title="Send Direct Message Request" onclick="openMsgRequestModal()">📩</button>
+        </div>
+
+        <!-- Bio -->
+        <p class="profile-bio">
+          Independent Hip-Hop Artist & Producer 🎙️ | Crafting raw narratives & soundscapes for LibreNet | Building independent web infrastructure 🌐
+        </p>
+      </div>
+
+      <!-- PROFILE FEED CATEGORY TABS -->
+      <div class="profile-tabs-bar">
+        <button class="prof-tab-btn active" onclick="switchProfileTab('posts', this)">📱 Posts</button>
+        <button class="prof-tab-btn" onclick="switchProfileTab('beams', this)">▶️ Beams</button>
+        <button class="prof-tab-btn" onclick="switchProfileTab('storyboards', this)">📖 Storyboards</button>
+        <button class="prof-tab-btn" onclick="switchProfileTab('stickers', this)">🎨 Stickers</button>
+      </div>
+
+      <!-- PROFILE CONTENT CONTAINER -->
+      <div class="feed-container" id="profile-feed-container">
+        <!-- Profile specific feed items rendered here -->
+      </div>
     </section>
 
     <!-- MOBILE BOTTOM NAVIGATION -->
@@ -969,7 +1214,7 @@
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
         Discover
       </button>
-      <button class="nav-item" style="opacity: 0.4; cursor: not-allowed;" title="Profile coming next">
+      <button class="nav-item" id="nav-profile" onclick="switchMainTab('profile')">
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         Profile
       </button>
@@ -983,10 +1228,53 @@
       <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 8px;">
         <div style="display: flex; justify-content: space-between;"><span>Beacon Social</span> <span style="color: var(--accent-green);">Connected</span></div>
         <div style="display: flex; justify-content: space-between;"><span>Vista Video</span> <span style="color: var(--accent-primary);">Ready</span></div>
-        <div style="display: flex; justify-content: space-between;"><span>Mail/Cloud</span> <span style="color: var(--text-muted);">Idle</span></div>
+        <div style="display: flex; justify-content: space-between;"><span>Sparks Balance</span> <span style="color: var(--accent-amber);">1,250 ⚡</span></div>
       </div>
     </div>
   </aside>
+
+  <!-- TELEGRAM-STYLE EXPANDED PROFILE PICTURE MODAL -->
+  <div class="avatar-expansion-modal" id="avatar-modal">
+    <div style="padding: 16px; display: flex; justify-content: space-between; align-items: center; color: #fff;">
+      <span id="avatar-index-counter" style="font-size: 0.85rem; font-weight: 700;">1 / 3 Avatar History</span>
+      <button onclick="closeAvatarExpansion()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    
+    <img src="https://picsum.photos/seed/tecuani_main/200" id="expanded-avatar-img" class="avatar-expanded-img" alt="Expanded Avatar">
+    
+    <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center; max-width: 400px; margin: 0 auto; width: 100%;">
+      <button class="close-drawer-btn" onclick="stepAvatar(-1)">‹ Previous</button>
+      <button class="close-drawer-btn" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border-color: rgba(239, 68, 68, 0.4);" onclick="deleteCurrentAvatar()">🗑️ Delete Photo</button>
+      <button class="close-drawer-btn" onclick="stepAvatar(1)">Next ›</button>
+    </div>
+  </div>
+
+  <!-- SPARKS TIP MODAL -->
+  <div class="msg-request-modal" id="sparks-modal">
+    <div class="request-box">
+      <h3 style="font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 8px;">⚡ Send Sparks to @tecuani</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Support creator directly via decentralized LibreNet currency.</p>
+      <div style="display: flex; gap: 10px; margin: 10px 0;">
+        <button class="btn-sparks" style="flex:1;" onclick="sendSparks(10)">10 ⚡</button>
+        <button class="btn-sparks" style="flex:1;" onclick="sendSparks(50)">50 ⚡</button>
+        <button class="btn-sparks" style="flex:1;" onclick="sendSparks(100)">100 ⚡</button>
+      </div>
+      <button class="close-drawer-btn" onclick="closeSparksModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ANTI-SPAM MESSAGE REQUEST MODAL -->
+  <div class="msg-request-modal" id="msg-request-modal">
+    <div class="request-box">
+      <h3 style="font-size: 1.1rem; color: #fff;">📩 Request Direct Message</h3>
+      <p style="font-size: 0.78rem; color: var(--text-muted);">To prevent spam, your first message is sent as a pending request. Previews and media links are stripped until accepted.</p>
+      <textarea style="width: 100%; height: 80px; background: var(--surface-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: #fff; padding: 10px; font-family: inherit;" placeholder="Write brief message request..."></textarea>
+      <div style="display: flex; gap: 10px;">
+        <button class="close-drawer-btn" style="flex: 1;" onclick="closeMsgRequestModal()">Cancel</button>
+        <button class="close-drawer-btn" style="flex: 1; background: var(--accent-primary);" onclick="submitMsgRequest()">Send Request</button>
+      </div>
+    </div>
+  </div>
 
   <!-- FULLSCREEN STORY VIEWER MODAL -->
   <div class="story-viewer-modal" id="story-viewer">
@@ -1002,20 +1290,14 @@
       <button onclick="closeStoryViewer()" style="background:none; border:none; color:#fff; font-size: 1.2rem; cursor:pointer;">✕</button>
     </div>
 
-    <div class="story-media-display" id="story-display-area">
-      <!-- Media inserted dynamically -->
-    </div>
-
-    <!-- Touch Navigation -->
+    <div class="story-media-display" id="story-display-area"></div>
     <div class="story-touch-left" onclick="stepStory(-1)"></div>
     <div class="story-touch-right" onclick="stepStory(1)"></div>
 
-    <!-- Next / Return Prompt at end of batch -->
     <div class="story-overlay-prompt" id="story-prompt" style="display: none;">
-      <span style="font-weight: 700; font-size: 0.9rem;">Finished Alice's Stories</span>
+      <span style="font-weight: 700; font-size: 0.9rem;">Finished Stories</span>
       <div style="display: flex; gap: 10px;">
         <button class="close-drawer-btn" onclick="closeStoryViewer()">Back to Feed</button>
-        <button class="close-drawer-btn" style="background: var(--accent-primary);" onclick="stepStory(1)">Next Creator ›</button>
       </div>
     </div>
   </div>
@@ -1043,16 +1325,9 @@
     let storyProgress = 0;
 
     const mockStories = {
-      'Alice': [
-        { type: 'text', content: 'Heading out to the coastal trail! 🌊', bg: 'linear-gradient(135deg, #06b6d4, #3b82f6)' },
-        { type: 'image', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80' }
-      ],
-      'Bob': [
-        { type: 'text', content: 'Late night coding session for LibreNet 🚀', bg: 'linear-gradient(135deg, #8b5cf6, #ec4899)' }
-      ],
-      'Mia': [
-        { type: 'image', url: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80' }
-      ]
+      'Alice': [{ type: 'text', content: 'Heading out to the coastal trail! 🌊', bg: 'linear-gradient(135deg, #06b6d4, #3b82f6)' }],
+      'Bob': [{ type: 'text', content: 'Late night coding session for LibreNet 🚀', bg: 'linear-gradient(135deg, #8b5cf6, #ec4899)' }],
+      'Mia': [{ type: 'image', url: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80' }]
     };
 
     function setStoryMode(mode) {
@@ -1070,14 +1345,11 @@
 
     function openStoryViewer(name, index = 0) {
       const viewer = document.getElementById('story-viewer');
-      const cleanName = name.split(' ')[0]; // Strip timestamp if timeline mode
+      const cleanName = name.split(' ')[0];
       document.getElementById('story-modal-name').innerText = name;
       document.getElementById('story-modal-avatar').src = `https://picsum.photos/seed/${cleanName.toLowerCase()}/100`;
       
-      const userStories = mockStories[cleanName] || [
-        { type: 'text', content: 'Spontaneous moment capture ✨', bg: 'linear-gradient(135deg, #10b981, #059669)' }
-      ];
-
+      const userStories = mockStories[cleanName] || [{ type: 'text', content: 'Spontaneous moment capture ✨', bg: 'linear-gradient(135deg, #10b981, #059669)' }];
       const mediaArea = document.getElementById('story-display-area');
       const current = userStories[index] || userStories[0];
 
@@ -1096,7 +1368,6 @@
       clearInterval(storyTimer);
       storyProgress = 0;
       const pfill = document.getElementById('story-pfill');
-      
       storyTimer = setInterval(() => {
         storyProgress += 2;
         pfill.style.width = storyProgress + '%';
@@ -1104,7 +1375,7 @@
           clearInterval(storyTimer);
           document.getElementById('story-prompt').style.display = 'flex';
         }
-      }, 60); // 3-second simulation
+      }, 60);
     }
 
     function closeStoryViewer() {
@@ -1112,9 +1383,7 @@
       document.getElementById('story-viewer').classList.remove('active');
     }
 
-    function stepStory(direction) {
-      closeStoryViewer();
-    }
+    function stepStory() { closeStoryViewer(); }
 
     /* ================= STORYBOARD MULTI-SLIDE NAVIGATION ================= */
     const storyboardState = {};
@@ -1138,7 +1407,7 @@
       dots.forEach((d, i) => d.classList.toggle('active', i === next));
     }
 
-    /* ================= EXPANDED DATA SEEDING FOR REALISTIC LIVE FEED ================= */
+    /* ================= MAIN DATA SEEDING FOR FEEDS ================= */
     const postDatabase = [
       {
         id: 1,
@@ -1147,13 +1416,12 @@
         user: '@kenji_explores',
         avatar: 'https://picsum.photos/seed/tokyo/100',
         time: '2 hours ago',
-        caption: 'Swipe through the Storyboard to check out my first day in Tokyo! Full video attached on the last slide.',
+        caption: 'Swipe through the Storyboard to check out my first day in Tokyo!',
         likes: '1,420',
         comments: '89',
         slides: [
-          { type: 'text', content: 'First 24 hours wandering around Shibuya & Harajuku... 🇯🇵', bg: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' },
-          { type: 'image', url: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80', caption: 'Found this hidden vinyl record café tucked away on the 3rd floor.' },
-          { type: 'image', url: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80', caption: 'Midnight ramen runs hit completely different here.' },
+          { type: 'text', content: 'First 24 hours wandering around Shibuya... 🇯🇵', bg: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80', caption: 'Vinyl record café.' },
           { type: 'vista', title: 'Tokyo Uncurated VLOG - Kenji' }
         ]
       },
@@ -1164,7 +1432,7 @@
         user: '@design_daily',
         avatar: 'https://picsum.photos/seed/art/100',
         time: '45 mins ago',
-        caption: 'Exploring organic 3D textures today. What do you think of this render?',
+        caption: 'Exploring organic 3D textures today.',
         imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
         likes: '482',
         comments: '12'
@@ -1176,80 +1444,57 @@
         user: '@sara_crafts',
         avatar: 'https://picsum.photos/seed/coffee/100',
         time: '3 mins ago',
-        text: '"The best part about an open, decentralized web is that creativity wins over clickbait algorithms again." 🌐✨',
+        text: '"Decentralized web allows creativity to win again." 🌐✨',
         likes: '14',
         comments: '2'
-      },
-      {
-        id: 4,
-        type: 'storyboard',
-        category: 'rising',
-        user: '@chef_marcus',
-        avatar: 'https://picsum.photos/seed/marcus/100',
-        time: '1 hour ago',
-        caption: '3 steps to mastering traditional Neapolitan pizza dough at home. 🍕',
-        likes: '890',
-        comments: '45',
-        slides: [
-          { type: 'text', content: 'Mastering 72-Hour Fermentation Dough 🍕', bg: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' },
-          { type: 'image', url: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80', caption: 'Step 1: High hydration flour mix (70% water).' },
-          { type: 'image', url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', caption: 'Step 2: 900°F woodfire blast for 60 seconds.' }
-        ]
-      },
-      {
-        id: 5,
-        type: 'video',
-        category: 'trending',
-        user: '@soundscapes',
-        avatar: 'https://picsum.photos/seed/synth/100',
-        time: '3 hours ago',
-        caption: 'Analog modular synth improvisations recorded live in the studio. 🎛️🔊',
-        videoBg: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
-        likes: '2,105',
-        comments: '132'
-      },
-      {
-        id: 6,
-        type: 'image',
-        category: 'new',
-        user: '@alpine_hikes',
-        avatar: 'https://picsum.photos/seed/hike/100',
-        time: '12 mins ago',
-        caption: 'Sunrise over the North Cascades. High altitude clarity hits different.',
-        imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
-        likes: '96',
-        comments: '8'
-      },
-      {
-        id: 7,
-        type: 'text',
-        category: 'trending',
-        user: '@tech_philosophy',
-        avatar: 'https://picsum.photos/seed/mind/100',
-        time: '4 hours ago',
-        text: 'Privacy isn\'t about hiding something wrong. It\'s about protecting the space to think, build, and express yourself freely.',
-        likes: '3,840',
-        comments: '310'
-      },
-      {
-        id: 8,
-        type: 'storyboard',
-        category: 'new',
-        user: '@urban_arch',
-        avatar: 'https://picsum.photos/seed/arch/100',
-        time: '18 mins ago',
-        caption: 'Restoring a mid-century architectural gem in downtown Portland.',
-        likes: '120',
-        comments: '15',
-        slides: [
-          { type: 'text', content: '1962 Mid-Century Home Renovation Tour 🏛️', bg: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)' },
-          { type: 'image', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', caption: 'Preserving original cedar paneling and floor-to-ceiling glass.' }
-        ]
       }
     ];
 
-    function renderFeed(postsArray) {
-      const container = document.getElementById('feed-container');
+    /* Profile Specific Posts database for @tecuani */
+    const tecuaniPosts = [
+      {
+        id: 101,
+        type: 'storyboard',
+        category: 'posts',
+        user: '@tecuani',
+        avatar: 'https://picsum.photos/seed/tecuani_main/200',
+        time: 'Yesterday',
+        caption: 'Unpacking the production concept for my upcoming mixtape series on LibreNet.',
+        likes: '3,210',
+        comments: '184',
+        slides: [
+          { type: 'text', content: 'Behind the Beat: Layering Analog Synths 🎧', bg: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=800&q=80', caption: 'Tracking vocal textures.' },
+          { type: 'vista', title: 'Contrapeso Mixtape Teaser' }
+        ]
+      },
+      {
+        id: 102,
+        type: 'video',
+        category: 'beams',
+        user: '@tecuani',
+        avatar: 'https://picsum.photos/seed/tecuani_main/200',
+        time: '3 days ago',
+        caption: 'Live studio freestyle clip. Direct output session. 🔥🎙️',
+        videoBg: 'linear-gradient(135deg, #1e1b4b 0%, #311b92 100%)',
+        likes: '5,420',
+        comments: '412'
+      },
+      {
+        id: 103,
+        type: 'text',
+        category: 'posts',
+        user: '@tecuani',
+        avatar: 'https://picsum.photos/seed/tecuani_main/200',
+        time: '5 days ago',
+        text: 'Never compromise on creative autonomy. Build your own tools, own your media, stay independent.',
+        likes: '1,890',
+        comments: '94'
+      }
+    ];
+
+    function renderFeed(postsArray, containerId = 'feed-container') {
+      const container = document.getElementById(containerId);
       container.innerHTML = '';
 
       postsArray.forEach(post => {
@@ -1282,9 +1527,8 @@
             } else if(slide.type === 'vista') {
               return `<div class="slide-item ${active}">
                 <div class="vista-cta-card">
-                  <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Full Travel Log</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Full Track & Video</div>
                   <h3 style="font-size: 1.2rem; color: #fff;">${slide.title}</h3>
-                  <p style="font-size: 0.8rem; color: var(--text-muted);">4K High Quality · Native Vista Player</p>
                   <button class="vista-btn" onclick="openVistaPlayer('${slide.title}')">▶ Watch on Vista</button>
                 </div>
               </div>`;
@@ -1300,29 +1544,17 @@
             </div>
           `;
         } else if (post.type === 'image') {
-          mediaBodyHtml = `
-            <div style="aspect-ratio: 4/5; width: 100%; background: #000;">
-              <img src="${post.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;" alt="Post image">
-            </div>
-          `;
+          mediaBodyHtml = `<div style="aspect-ratio: 4/5; width: 100%; background: #000;"><img src="${post.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;"></div>`;
         } else if (post.type === 'text') {
-          mediaBodyHtml = `
-            <div style="padding: 28px; background: var(--surface-elevated); font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: var(--text-main);">
-              ${post.text}
-            </div>
-          `;
+          mediaBodyHtml = `<div style="padding: 28px; background: var(--surface-elevated); font-size: 1.15rem; font-weight: 600; line-height: 1.5; color: var(--text-main);">${post.text}</div>`;
         } else if (post.type === 'video') {
-          mediaBodyHtml = `
-            <div class="video-card-preview" style="background: ${post.videoBg}">
-              <div class="video-play-badge">▶</div>
-            </div>
-          `;
+          mediaBodyHtml = `<div class="video-card-preview" style="background: ${post.videoBg}"><div class="video-play-badge">▶ BEAM</div></div>`;
         }
 
         article.innerHTML = `
           <div class="post-header">
             <div class="post-user">
-              <img src="${post.avatar}" class="post-user-img" alt="User">
+              <img src="${post.avatar}" class="post-user-img">
               <div>
                 <div class="post-username">${post.user}</div>
                 <div style="font-size: 0.7rem; color: var(--text-muted);">${post.time}</div>
@@ -1333,69 +1565,156 @@
           ${mediaBodyHtml}
           <div class="post-actions">
             <div class="action-group">
-              <button class="action-icon-btn" onclick="toggleLike(this)">
-                <span class="icon">🤍</span> <span class="count">${post.likes}</span>
-              </button>
+              <button class="action-icon-btn" onclick="toggleLike(this)"><span class="icon">🤍</span> <span class="count">${post.likes}</span></button>
               <button class="action-icon-btn">💬 <span>${post.comments}</span></button>
               <button class="action-icon-btn">🔄</button>
             </div>
           </div>
           ${post.caption ? `<div class="post-caption-block"><strong>${post.user}</strong> ${post.caption}</div>` : ''}
         `;
-
         container.appendChild(article);
       });
-
-      // Add Infinite Load Button at bottom of feed
-      const loadBtn = document.createElement('button');
-      loadBtn.className = 'load-more-btn';
-      loadBtn.innerText = 'Load More Posts...';
-      loadBtn.onclick = () => {
-        loadBtn.innerText = 'Refreshing Feed...';
-        setTimeout(() => {
-          renderFeed([...postDatabase].sort(() => Math.random() - 0.5));
-          if(document.getElementById('nav-discover').classList.contains('active')) {
-            document.querySelectorAll('.disc-only-label').forEach(lbl => lbl.style.display = 'inline-block');
-          }
-        }, 400);
-      };
-      container.appendChild(loadBtn);
     }
 
-    /* Initialize feed on start */
-    window.addEventListener('DOMContentLoaded', () => {
-      // Shuffle array to feel fresh on every view
-      const shuffled = [...postDatabase].sort(() => Math.random() - 0.5);
-      renderFeed(shuffled);
-    });
+    /* ================= PROFILE TELEGRAM-STYLE AVATAR GALLERY ================= */
+    const tecuaniAvatars = [
+      'https://picsum.photos/seed/tecuani_main/200',
+      'https://picsum.photos/seed/tecuani_old1/200',
+      'https://picsum.photos/seed/tecuani_old2/200'
+    ];
+    let currentAvatarIdx = 0;
 
-    /* ================= MAIN TAB SWITCHING (HOME / DISCOVER) ================= */
+    function openAvatarExpansion() {
+      document.getElementById('avatar-modal').classList.add('active');
+      updateAvatarModal();
+    }
+
+    function closeAvatarExpansion() {
+      document.getElementById('avatar-modal').classList.remove('active');
+    }
+
+    function updateAvatarModal() {
+      document.getElementById('expanded-avatar-img').src = tecuaniAvatars[currentAvatarIdx];
+      document.getElementById('avatar-index-counter').innerText = `${currentAvatarIdx + 1} / ${tecuaniAvatars.length} Avatar History`;
+    }
+
+    function stepAvatar(delta) {
+      currentAvatarIdx = (currentAvatarIdx + delta + tecuaniAvatars.length) % tecuaniAvatars.length;
+      updateAvatarModal();
+    }
+
+    function deleteCurrentAvatar() {
+      if(tecuaniAvatars.length <= 1) {
+        alert("Cannot delete primary active profile photo.");
+        return;
+      }
+      tecuaniAvatars.splice(currentAvatarIdx, 1);
+      currentAvatarIdx = 0;
+      document.getElementById('current-hero-img').src = tecuaniAvatars[0];
+      updateAvatarModal();
+    }
+
+    /* ================= PROFILE MODALS & INTERACTION ================= */
+    function toggleFollow(btn) {
+      if(btn.classList.contains('following')) {
+        btn.classList.remove('following');
+        btn.innerText = 'Follow';
+      } else {
+        btn.classList.add('following');
+        btn.innerText = 'Following';
+      }
+    }
+
+    function openSparksModal() { document.getElementById('sparks-modal').classList.add('active'); }
+    function closeSparksModal() { document.getElementById('sparks-modal').classList.remove('active'); }
+    function sendSparks(amt) {
+      alert(`Successfully sent ${amt} Sparks ⚡ to @tecuani!`);
+      closeSparksModal();
+    }
+
+    function openMsgRequestModal() { document.getElementById('msg-request-modal').classList.add('active'); }
+    function closeMsgRequestModal() { document.getElementById('msg-request-modal').classList.remove('active'); }
+    function submitMsgRequest() {
+      alert("Message request sent! Direct messaging will unlock once approved.");
+      closeMsgRequestModal();
+    }
+
+    function switchProfileTab(tab, btn) {
+      document.querySelectorAll('.prof-tab-btn').forEach(b => b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+
+      const profContainer = document.getElementById('profile-feed-container');
+
+      if(tab === 'posts') {
+        renderFeed(tecuaniPosts, 'profile-feed-container');
+      } else if(tab === 'beams') {
+        const beams = tecuaniPosts.filter(p => p.type === 'video');
+        renderFeed(beams, 'profile-feed-container');
+      } else if(tab === 'storyboards') {
+        const sbs = tecuaniPosts.filter(p => p.type === 'storyboard');
+        renderFeed(sbs, 'profile-feed-container');
+      } else if(tab === 'stickers') {
+        profContainer.innerHTML = `
+          <div class="stickers-grid">
+            <div class="sticker-item">⚡<span class="sticker-name">Spark Energy</span></div>
+            <div class="sticker-item">🎙️<span class="sticker-name">Mic Check</span></div>
+            <div class="sticker-item">🌐<span class="sticker-name">LibreNet</span></div>
+            <div class="sticker-item">🔥<span class="sticker-name">Flame</span></div>
+            <div class="sticker-item">🎹<span class="sticker-name">Analog Synth</span></div>
+            <div class="sticker-item">🔒<span class="sticker-name">Encrypted</span></div>
+          </div>
+        `;
+      }
+    }
+
+    /* ================= MAIN TAB SWITCHING ================= */
     function switchMainTab(tab) {
       const navHome = document.getElementById('nav-home');
       const navDisc = document.getElementById('nav-discover');
+      const navProf = document.getElementById('nav-profile');
       const deskNavHome = document.getElementById('desk-nav-home');
       const deskNavDisc = document.getElementById('desk-nav-discover');
+      const deskNavProf = document.getElementById('desk-nav-profile');
+
+      const mainFeed = document.getElementById('feed-container');
+      const profView = document.getElementById('profile-view');
+      const storyDock = document.getElementById('main-story-dock');
       const discSubtabs = document.getElementById('discover-subtabs');
       const discLabels = document.querySelectorAll('.disc-only-label');
 
+      // Reset Active Class
+      [navHome, navDisc, navProf].forEach(n => n && n.classList.remove('active'));
+      [deskNavHome, deskNavDisc, deskNavProf].forEach(n => n && n.classList.remove('active'));
+
       if(tab === 'home') {
         navHome.classList.add('active');
-        navDisc.classList.remove('active');
         if(deskNavHome) deskNavHome.classList.add('active');
-        if(deskNavDisc) deskNavDisc.classList.remove('active');
-        
+
+        mainFeed.style.display = 'flex';
+        profView.classList.remove('active');
+        storyDock.style.display = 'block';
         discSubtabs.style.display = 'none';
         discLabels.forEach(lbl => lbl.style.display = 'none');
         showAllPosts();
       } else if(tab === 'discover') {
         navDisc.classList.add('active');
-        navHome.classList.remove('active');
         if(deskNavDisc) deskNavDisc.classList.add('active');
-        if(deskNavHome) deskNavHome.classList.remove('active');
 
+        mainFeed.style.display = 'flex';
+        profView.classList.remove('active');
+        storyDock.style.display = 'block';
         discSubtabs.style.display = 'flex';
         discLabels.forEach(lbl => lbl.style.display = 'inline-block');
         filterDiscover('trending', document.querySelector('.disc-tab-btn'));
+      } else if(tab === 'profile') {
+        navProf.classList.add('active');
+        if(deskNavProf) deskNavProf.classList.add('active');
+
+        mainFeed.style.display = 'none';
+        storyDock.style.display = 'none';
+        discSubtabs.style.display = 'none';
+        profView.classList.add('active');
+        switchProfileTab('posts', document.querySelector('.prof-tab-btn'));
       }
     }
 
@@ -1403,7 +1722,7 @@
       document.querySelectorAll('.disc-tab-btn').forEach(b => b.classList.remove('active'));
       if(btn) btn.classList.add('active');
 
-      const posts = document.querySelectorAll('.post-card');
+      const posts = document.querySelectorAll('#feed-container .post-card');
       posts.forEach(post => {
         if(category === 'all' || post.dataset.category === category) {
           post.style.display = 'block';
@@ -1414,10 +1733,9 @@
     }
 
     function showAllPosts() {
-      document.querySelectorAll('.post-card').forEach(p => p.style.display = 'block');
+      document.querySelectorAll('#feed-container .post-card').forEach(p => p.style.display = 'block');
     }
 
-    /* ================= VISTA PLAYER INTEGRATION ================= */
     function openVistaPlayer(title) {
       document.getElementById('vista-video-title').innerText = title;
       document.getElementById('vista-modal').classList.add('active');
@@ -1427,7 +1745,6 @@
       document.getElementById('vista-modal').classList.remove('active');
     }
 
-    /* ================= LIKE INTERACTION ================= */
     function toggleLike(btn) {
       const icon = btn.querySelector('.icon');
       const countSpan = btn.querySelector('.count');
@@ -1441,6 +1758,10 @@
         countSpan.innerText = (count - 1).toLocaleString();
       }
     }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFeed(postDatabase, 'feed-container');
+    });
   </script>
 </body>
 </html>
