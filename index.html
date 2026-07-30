@@ -527,7 +527,7 @@
       transition: transform 0.2s ease;
     }
 
-    /* FULL SCREEN THREAD / POST VIEW */
+    /* FULLSCREEN POST THREAD OVERLAY */
     .fullscreen-post-overlay {
       position: fixed;
       inset: 0;
@@ -589,25 +589,15 @@
       border: 1px solid var(--border-color);
     }
 
-    /* PROFILE STYLES */
+    /* PROFILE STYLES - STRICT DISPLAY CLEANUP */
     .profile-container {
-      display: flex;
+      display: none;
       flex-direction: column;
       background: var(--bg-dark);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px);
-      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-      position: absolute;
       width: 100%;
-      pointer-events: none;
     }
     .profile-container.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-      position: relative;
-      pointer-events: auto;
+      display: flex;
     }
 
     .profile-header-card {
@@ -976,6 +966,42 @@
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .menu-drawer-modal.active .menu-content-box { transform: translateY(0); }
+
+    /* FIXED MODALS ISOLATION */
+    .msg-request-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 150;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .msg-request-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .request-box {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transform: scale(0.92);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .msg-request-modal.active .request-box {
+      transform: scale(1);
+    }
   </style>
 </head>
 <body>
@@ -1337,24 +1363,6 @@
       }
     }
 
-    /* STORYBOARDS NAVIGATION */
-    const storyboardState = {};
-    function moveStoryboard(id, delta) {
-      const current = storyboardState[id] || 0;
-      const total = 2;
-      let next = current + delta;
-      if(next < 0) next = 0;
-      if(next >= total) next = total - 1;
-      storyboardState[id] = next;
-
-      const viewport = document.getElementById(`sb-viewport-${id}`);
-      if(!viewport) return;
-      const slides = viewport.querySelectorAll('.slide-item');
-      const dots = viewport.querySelectorAll('.dot-step');
-      slides.forEach((s, i) => s.classList.toggle('active', i === next));
-      dots.forEach((d, i) => d.classList.toggle('active', i === next));
-    }
-
     /* RENDER FEED ENGINE */
     function renderFeed(postsArray, containerId = 'feed-container', append = false) {
       const container = document.getElementById(containerId);
@@ -1365,7 +1373,7 @@
         article.className = 'post-card';
         article.dataset.category = post.category;
         article.onclick = (e) => {
-          if(!e.target.closest('.post-user') && !e.target.closest('.sb-btn-left') && !e.target.closest('.sb-btn-right')) {
+          if(!e.target.closest('.post-user')) {
             openFullscreenPost(post);
           }
         };
@@ -1385,7 +1393,6 @@
         let mediaBodyHtml = '';
 
         if (post.type === 'storyboard') {
-          storyboardState[post.id] = 0;
           let dots = post.slides.map((_, i) => `<div class="dot-step ${i===0?'active':''}"></div>`).join('');
           let slideItems = post.slides.map((slide, i) => {
             let active = i === 0 ? 'active' : '';
@@ -1414,7 +1421,7 @@
 
         article.innerHTML = `
           <div class="post-header">
-            <div class="post-user" onclick="openUserProfile('${post.user}')">
+            <div class="post-user" onclick="event.stopPropagation(); openUserProfile('${post.user}')">
               <img src="${post.avatar}" class="post-user-img">
               <div>
                 <div class="post-username">${post.user}</div>
@@ -1431,7 +1438,7 @@
               <button class="action-icon-btn">🔄</button>
             </div>
           </div>
-          ${post.caption ? `<div class="post-caption-block"><strong onclick="openUserProfile('${post.user}')" style="cursor:pointer;">${post.user}</strong> ${post.caption}</div>` : ''}
+          ${post.caption ? `<div class="post-caption-block"><strong onclick="event.stopPropagation(); openUserProfile('${post.user}')" style="cursor:pointer;">${post.user}</strong> ${post.caption}</div>` : ''}
         `;
         container.appendChild(article);
       });
@@ -1479,7 +1486,6 @@
       document.getElementById('prof-stat-following').innerText = data.following;
       document.getElementById('prof-bio').innerText = data.bio;
 
-      /* SHOW MENU BUTTON AND FLOATING CREATE BUTTON IF OWN PROFILE */
       const isOwnProfile = handle === '@tecuani';
       document.getElementById('nav-menu').style.display = isOwnProfile ? 'flex' : 'none';
       document.getElementById('desk-nav-menu').style.display = isOwnProfile ? 'flex' : 'none';
@@ -1513,9 +1519,13 @@
       toggleCreateMenu();
     }
 
-    /* MENU DRAWER */
+    /* MODAL HANDLERS */
     function openMenuDrawer() { document.getElementById('menu-drawer-modal').classList.add('active'); }
     function closeMenuDrawer() { document.getElementById('menu-drawer-modal').classList.remove('active'); }
+    function openSparksModal() { document.getElementById('sparks-modal').classList.add('active'); }
+    function closeSparksModal() { document.getElementById('sparks-modal').classList.remove('active'); }
+    function openMsgRequestModal() { document.getElementById('msg-request-modal').classList.add('active'); }
+    function closeMsgRequestModal() { document.getElementById('msg-request-modal').classList.remove('active'); }
 
     /* MAIN TAB SWITCHING */
     function switchMainTab(tab) {
@@ -1542,7 +1552,7 @@
         navDisc.classList.add('active');
         mainFeed.style.display = 'flex';
         profView.classList.remove('active');
-        storyDock.style.display = 'none'; // STORIES HIDDEN ON DISCOVER
+        storyDock.style.display = 'none';
         discSubtabs.style.display = 'flex';
         discLabels.forEach(lbl => lbl.style.display = 'inline-block');
         filterDiscover('all', document.querySelector('.disc-tab-btn'));
@@ -1587,6 +1597,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      switchMainTab('home');
       renderFeed(postDatabase, 'feed-container');
     });
   </script>
