@@ -188,6 +188,12 @@
       text-overflow: ellipsis;
     }
 
+    .story-timestamp-sub {
+      font-size: 0.65rem;
+      color: var(--accent-primary);
+      font-weight: 700;
+    }
+
     .more-stories-btn {
       display: flex;
       flex-direction: column;
@@ -206,27 +212,6 @@
       transition: background 0.2s;
     }
     .more-stories-btn:hover { background: rgba(99, 102, 241, 0.15); }
-
-    /* Timeline Mode Cards */
-    .timeline-item-card {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--surface-elevated);
-      padding: 6px 12px 6px 6px;
-      border-radius: var(--radius-full);
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .timeline-time {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--accent-primary);
-      background: rgba(99, 102, 241, 0.15);
-      padding: 3px 6px;
-      border-radius: var(--radius-sm);
-    }
 
     /* STORY DRAWER (EXPANDED) */
     .story-drawer {
@@ -446,6 +431,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      cursor: pointer;
     }
 
     .post-user-img {
@@ -459,6 +445,7 @@
       font-size: 0.85rem;
       font-weight: 700;
     }
+    .post-username:hover { text-decoration: underline; }
 
     .post-badge {
       font-size: 0.65rem;
@@ -648,7 +635,7 @@
       border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
-    /* ================= PROFILE LAYOUT STYLES ================= */
+    /* PROFILE LAYOUT STYLES */
     .profile-container {
       display: none;
       flex-direction: column;
@@ -792,7 +779,6 @@
       padding: 0 10px;
     }
 
-    /* PROFILE NAVIGATION TABS */
     .profile-tabs-bar {
       display: flex;
       background: var(--bg-dark);
@@ -823,7 +809,6 @@
       border-bottom-color: var(--accent-primary);
     }
 
-    /* STICKERS GRID */
     .stickers-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -846,7 +831,6 @@
     }
     .sticker-name { font-size: 0.68rem; color: var(--text-muted); margin-top: 6px; font-weight: 600; }
 
-    /* TELEGRAM STYLE AVATAR EXPANSION MODAL */
     .avatar-expansion-modal {
       position: fixed;
       inset: 0;
@@ -867,7 +851,6 @@
       margin: auto;
     }
 
-    /* ANTI SPAM REQUEST MODAL */
     .msg-request-modal {
       position: fixed;
       inset: 0;
@@ -923,9 +906,7 @@
       width: 33%;
     }
 
-    .nav-item.active {
-      color: var(--accent-primary);
-    }
+    .nav-item.active { color: var(--accent-primary); }
 
     .nav-item svg {
       width: 22px;
@@ -938,9 +919,7 @@
     }
 
     /* DESKTOP SPECIFIC EXTENSIONS */
-    .desktop-sidebar, .desktop-widgets {
-      display: none;
-    }
+    .desktop-sidebar, .desktop-widgets { display: none; }
 
     @media (min-width: 1024px) {
       .bottom-nav { display: none; }
@@ -996,7 +975,6 @@
       }
     }
 
-    /* Embedded Vista Player Simulation */
     .vista-modal {
       position: fixed;
       inset: 0;
@@ -1018,17 +996,12 @@
       overflow: hidden;
     }
 
-    .load-more-btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      font-weight: 700;
-      font-size: 0.85rem;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      margin-top: 8px;
+    .scroll-loader-spinner {
+      padding: 16px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
     }
   </style>
 </head>
@@ -1040,15 +1013,9 @@
       BEACON <span class="badge-librenet">LibreNet</span>
     </div>
     <nav style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;">
-      <button class="desktop-nav-btn active" id="desk-nav-home" onclick="switchMainTab('home')">
-        🏠 Home
-      </button>
-      <button class="desktop-nav-btn" id="desk-nav-discover" onclick="switchMainTab('discover')">
-        🧭 Discover
-      </button>
-      <button class="desktop-nav-btn" id="desk-nav-profile" onclick="switchMainTab('profile')">
-        👤 Profile
-      </button>
+      <button class="desktop-nav-btn active" id="desk-nav-home" onclick="switchMainTab('home')">🏠 Home</button>
+      <button class="desktop-nav-btn" id="desk-nav-discover" onclick="switchMainTab('discover')">🧭 Discover</button>
+      <button class="desktop-nav-btn" id="desk-nav-profile" onclick="openUserProfile('@tecuani')">👤 Profile</button>
     </nav>
   </aside>
 
@@ -1065,7 +1032,7 @@
       </div>
     </header>
 
-    <!-- STORY DOCK (VISIBLE IN HOME/DISCOVER VIEWS) -->
+    <!-- STORY DOCK -->
     <section class="story-dock-wrapper" id="main-story-dock">
       <div class="story-scroll-container" id="story-row-creator">
         <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0)">
@@ -1091,21 +1058,6 @@
         <button class="more-stories-btn" onclick="toggleStoryDrawer(true)">+37</button>
       </div>
 
-      <div class="story-scroll-container" id="story-row-timeline" style="display: none;">
-        <div class="timeline-item-card" onclick="openStoryViewer('Alice (9:02 AM)', 0)">
-          <span class="timeline-time">9:02 AM</span>
-          <span style="font-size: 0.78rem; font-weight: 600;">Alice</span>
-        </div>
-        <div class="timeline-item-card" onclick="openStoryViewer('Bob (9:04 AM)', 0)">
-          <span class="timeline-time">9:04 AM</span>
-          <span style="font-size: 0.78rem; font-weight: 600;">Bob</span>
-        </div>
-        <div class="timeline-item-card" onclick="openStoryViewer('Carlos (9:06 AM)', 0)">
-          <span class="timeline-time">9:06 AM</span>
-          <span style="font-size: 0.78rem; font-weight: 600;">Carlos</span>
-        </div>
-      </div>
-
       <!-- EXPANDABLE STORY DRAWER (+37) -->
       <div class="story-drawer" id="story-drawer">
         <div class="drawer-header">
@@ -1115,28 +1067,17 @@
           </div>
         </div>
 
-        <div class="drawer-section-label">New Today</div>
-        <div class="drawer-scroll-row">
-          <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img"></div>
-            <span class="story-username">Alice</span>
-          </div>
-          <div class="story-avatar-item" onclick="openStoryViewer('Bob', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring"><img src="https://picsum.photos/seed/bob/100" class="avatar-img"></div>
-            <span class="story-username">Bob</span>
-          </div>
-          <div class="story-avatar-item" onclick="openStoryViewer('Mia', 0); toggleStoryDrawer(false);">
-            <div class="avatar-ring"><img src="https://picsum.photos/seed/mia/100" class="avatar-img"></div>
-            <span class="story-username">Mia</span>
-          </div>
+        <div id="drawer-content-area">
+          <!-- Dynamic rendering based on Creator vs Timeline view modes -->
         </div>
+
         <div class="drawer-footer">
           <button class="close-drawer-btn" onclick="toggleStoryDrawer(false)">Close ✕</button>
         </div>
       </div>
     </section>
 
-    <!-- DISCOVER CATEGORY TABS (VISIBLE ONLY IN DISCOVER VIEW) -->
+    <!-- DISCOVER CATEGORY TABS -->
     <div class="discover-tabs" id="discover-subtabs" style="display: none;">
       <button class="disc-tab-btn active" onclick="filterDiscover('trending', this)">🔥 Trending</button>
       <button class="disc-tab-btn" onclick="filterDiscover('new', this)">⏱️ New</button>
@@ -1144,53 +1085,43 @@
     </div>
 
     <!-- HOME / DISCOVER MAIN CONTENT FEED -->
-    <section class="feed-container" id="feed-container">
-      <!-- Posts dynamically generated via Javascript -->
-    </section>
+    <section class="feed-container" id="feed-container"></section>
+    <div class="scroll-loader-spinner" id="infinite-scroll-indicator">Loading more posts...</div>
 
-    <!-- USER PROFILE CONTAINER (HIDDEN BY DEFAULT) -->
+    <!-- DYNAMIC USER PROFILE CONTAINER -->
     <section class="profile-container" id="profile-view">
-      <!-- PROFILE HEADER CARD -->
       <div class="profile-header-card">
-        
-        <!-- Telegram-Style Hero Avatar -->
         <div class="profile-hero-avatar" onclick="openAvatarExpansion()">
-          <img src="https://picsum.photos/seed/tecuani_main/200" id="current-hero-img" class="profile-hero-img" alt="Tonatecuani">
+          <img src="" id="current-hero-img" class="profile-hero-img" alt="User Profile">
         </div>
 
-        <h1 class="profile-display-name">Tonatecuani</h1>
-        <div class="profile-handle">@tecuani</div>
+        <h1 class="profile-display-name" id="prof-display-name">---</h1>
+        <div class="profile-handle" id="prof-handle">@---</div>
 
-        <!-- Balanced Stats Strip -->
         <div class="profile-stats-strip">
           <div class="stat-box">
-            <span class="stat-num">48</span>
+            <span class="stat-num" id="prof-stat-posts">0</span>
             <span class="stat-lbl">Posts</span>
           </div>
           <div class="stat-box">
-            <span class="stat-num">14.2K</span>
+            <span class="stat-num" id="prof-stat-followers">0</span>
             <span class="stat-lbl">Followers</span>
           </div>
           <div class="stat-box">
-            <span class="stat-num">380</span>
+            <span class="stat-num" id="prof-stat-following">0</span>
             <span class="stat-lbl">Following</span>
           </div>
         </div>
 
-        <!-- Action Row (Follow, Sparks Tip, DM Request) -->
         <div class="profile-action-row">
           <button class="btn-follow" id="prof-follow-btn" onclick="toggleFollow(this)">Follow</button>
           <button class="btn-sparks" onclick="openSparksModal()">⚡ Send Sparks</button>
           <button class="btn-msg-request" title="Send Direct Message Request" onclick="openMsgRequestModal()">📩</button>
         </div>
 
-        <!-- Bio -->
-        <p class="profile-bio">
-          Independent Hip-Hop Artist & Producer 🎙️ | Crafting raw narratives & soundscapes for LibreNet | Building independent web infrastructure 🌐
-        </p>
+        <p class="profile-bio" id="prof-bio">---</p>
       </div>
 
-      <!-- PROFILE FEED CATEGORY TABS -->
       <div class="profile-tabs-bar">
         <button class="prof-tab-btn active" onclick="switchProfileTab('posts', this)">📱 Posts</button>
         <button class="prof-tab-btn" onclick="switchProfileTab('beams', this)">▶️ Beams</button>
@@ -1198,10 +1129,7 @@
         <button class="prof-tab-btn" onclick="switchProfileTab('stickers', this)">🎨 Stickers</button>
       </div>
 
-      <!-- PROFILE CONTENT CONTAINER -->
-      <div class="feed-container" id="profile-feed-container">
-        <!-- Profile specific feed items rendered here -->
-      </div>
+      <div class="feed-container" id="profile-feed-container"></div>
     </section>
 
     <!-- MOBILE BOTTOM NAVIGATION -->
@@ -1214,7 +1142,7 @@
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
         Discover
       </button>
-      <button class="nav-item" id="nav-profile" onclick="switchMainTab('profile')">
+      <button class="nav-item" id="nav-profile" onclick="openUserProfile('@tecuani')">
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         Profile
       </button>
@@ -1233,15 +1161,13 @@
     </div>
   </aside>
 
-  <!-- TELEGRAM-STYLE EXPANDED PROFILE PICTURE MODAL -->
+  <!-- MODALS -->
   <div class="avatar-expansion-modal" id="avatar-modal">
     <div style="padding: 16px; display: flex; justify-content: space-between; align-items: center; color: #fff;">
       <span id="avatar-index-counter" style="font-size: 0.85rem; font-weight: 700;">1 / 3 Avatar History</span>
       <button onclick="closeAvatarExpansion()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
-    
-    <img src="https://picsum.photos/seed/tecuani_main/200" id="expanded-avatar-img" class="avatar-expanded-img" alt="Expanded Avatar">
-    
+    <img src="" id="expanded-avatar-img" class="avatar-expanded-img" alt="Expanded Avatar">
     <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center; max-width: 400px; margin: 0 auto; width: 100%;">
       <button class="close-drawer-btn" onclick="stepAvatar(-1)">‹ Previous</button>
       <button class="close-drawer-btn" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border-color: rgba(239, 68, 68, 0.4);" onclick="deleteCurrentAvatar()">🗑️ Delete Photo</button>
@@ -1249,10 +1175,9 @@
     </div>
   </div>
 
-  <!-- SPARKS TIP MODAL -->
   <div class="msg-request-modal" id="sparks-modal">
     <div class="request-box">
-      <h3 style="font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 8px;">⚡ Send Sparks to @tecuani</h3>
+      <h3 style="font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 8px;">⚡ Send Sparks</h3>
       <p style="font-size: 0.8rem; color: var(--text-muted);">Support creator directly via decentralized LibreNet currency.</p>
       <div style="display: flex; gap: 10px; margin: 10px 0;">
         <button class="btn-sparks" style="flex:1;" onclick="sendSparks(10)">10 ⚡</button>
@@ -1263,7 +1188,6 @@
     </div>
   </div>
 
-  <!-- ANTI-SPAM MESSAGE REQUEST MODAL -->
   <div class="msg-request-modal" id="msg-request-modal">
     <div class="request-box">
       <h3 style="font-size: 1.1rem; color: #fff;">📩 Request Direct Message</h3>
@@ -1276,24 +1200,20 @@
     </div>
   </div>
 
-  <!-- FULLSCREEN STORY VIEWER MODAL -->
   <div class="story-viewer-modal" id="story-viewer">
     <div class="story-progress-bar">
       <div class="progress-segment"><div class="progress-fill" id="story-pfill"></div></div>
     </div>
-
     <div class="story-user-header">
       <div class="story-user-info">
-        <img src="https://picsum.photos/seed/alice/100" id="story-modal-avatar" style="width:32px; height:32px; border-radius:50%;">
-        <span id="story-modal-name" style="font-weight: 700; font-size: 0.9rem;">Alice</span>
+        <img src="" id="story-modal-avatar" style="width:32px; height:32px; border-radius:50%;">
+        <span id="story-modal-name" style="font-weight: 700; font-size: 0.9rem;">---</span>
       </div>
       <button onclick="closeStoryViewer()" style="background:none; border:none; color:#fff; font-size: 1.2rem; cursor:pointer;">✕</button>
     </div>
-
     <div class="story-media-display" id="story-display-area"></div>
     <div class="story-touch-left" onclick="stepStory(-1)"></div>
     <div class="story-touch-right" onclick="stepStory(1)"></div>
-
     <div class="story-overlay-prompt" id="story-prompt" style="display: none;">
       <span style="font-weight: 700; font-size: 0.9rem;">Finished Stories</span>
       <div style="display: flex; gap: 10px;">
@@ -1302,7 +1222,6 @@
     </div>
   </div>
 
-  <!-- NATIVE VISTA PLAYER MODAL -->
   <div class="vista-modal" id="vista-modal">
     <div class="vista-player-box">
       <div style="padding: 12px 16px; background: var(--card-bg); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color);">
@@ -1317,9 +1236,131 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT INTERACTIVITY -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    /* ================= STORY DOCK STATE & MECHANICS ================= */
+    /* ================= USER PROFILES DATABASE ================= */
+    const profilesDB = {
+      '@tecuani': {
+        name: 'Tonatecuani',
+        handle: '@tecuani',
+        avatar: 'https://picsum.photos/seed/tecuani_main/200',
+        posts: '48',
+        followers: '14.2K',
+        following: '380',
+        bio: 'Independent Hip-Hop Artist & Producer 🎙️ | Crafting raw narratives & soundscapes for LibreNet | Building independent web infrastructure 🌐',
+        avatarsHistory: ['https://picsum.photos/seed/tecuani_main/200', 'https://picsum.photos/seed/tecuani_old1/200'],
+        stickers: ['⚡', '🎙️', '🌐', '🔥', '🎹', '🔒']
+      },
+      '@kenji_explores': {
+        name: 'Kenji Takahashi',
+        handle: '@kenji_explores',
+        avatar: 'https://picsum.photos/seed/tokyo/100',
+        posts: '124',
+        followers: '28.5K',
+        following: '512',
+        bio: 'Tokyo-based street photographer & documentary creator. Capturing nocturnal perspectives & analog culture 📷🏮',
+        avatarsHistory: ['https://picsum.photos/seed/tokyo/100'],
+        stickers: ['🇯🇵', '📷', '🏮', '🍜', '📻', '🌃']
+      },
+      '@design_daily': {
+        name: 'Elena Rostova',
+        handle: '@design_daily',
+        avatar: 'https://picsum.photos/seed/art/100',
+        posts: '89',
+        followers: '9.4K',
+        following: '210',
+        bio: '3D motion design & generative graphics artist. Minimalist aesthetics for decentralized projects 🎨✨',
+        avatarsHistory: ['https://picsum.photos/seed/art/100'],
+        stickers: ['🎨', '✨', '📐', '🔮', '💎', '💡']
+      },
+      '@sara_crafts': {
+        name: 'Sara Lin',
+        handle: '@sara_crafts',
+        avatar: 'https://picsum.photos/seed/coffee/100',
+        posts: '62',
+        followers: '3.1K',
+        following: '145',
+        bio: 'Open-source advocate & ceramicist. Crafting physical objects & digital freedom tools ☕💻',
+        avatarsHistory: ['https://picsum.photos/seed/coffee/100'],
+        stickers: ['☕', '💻', '🏺', '🌿', '⚙️', '☀️']
+      }
+    };
+
+    let activeProfileHandle = '@tecuani';
+    let currentAvatarIdx = 0;
+
+    /* ================= MAIN FEEDS DATABASE ================= */
+    const postDatabase = [
+      {
+        id: 1,
+        type: 'storyboard',
+        category: 'trending',
+        user: '@kenji_explores',
+        avatar: 'https://picsum.photos/seed/tokyo/100',
+        time: '2 hours ago',
+        caption: 'Swipe through the Storyboard to check out my first day in Tokyo!',
+        likes: '1,420',
+        comments: '89',
+        slides: [
+          { type: 'text', content: 'First 24 hours wandering around Shibuya... 🇯🇵', bg: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80', caption: 'Vinyl record café.' },
+          { type: 'vista', title: 'Tokyo Uncurated VLOG - Kenji' }
+        ]
+      },
+      {
+        id: 2,
+        type: 'image',
+        category: 'rising',
+        user: '@design_daily',
+        avatar: 'https://picsum.photos/seed/art/100',
+        time: '45 mins ago',
+        caption: 'Exploring organic 3D textures today.',
+        imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+        likes: '482',
+        comments: '12'
+      },
+      {
+        id: 3,
+        type: 'text',
+        category: 'new',
+        user: '@sara_crafts',
+        avatar: 'https://picsum.photos/seed/coffee/100',
+        time: '3 mins ago',
+        text: '"Decentralized web allows creativity to win again." 🌐✨',
+        likes: '14',
+        comments: '2'
+      },
+      {
+        id: 4,
+        type: 'storyboard',
+        category: 'trending',
+        user: '@tecuani',
+        avatar: 'https://picsum.photos/seed/tecuani_main/200',
+        time: 'Yesterday',
+        caption: 'Unpacking the production concept for my upcoming mixtape series on LibreNet.',
+        likes: '3,210',
+        comments: '184',
+        slides: [
+          { type: 'text', content: 'Behind the Beat: Layering Analog Synths 🎧', bg: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=800&q=80', caption: 'Tracking vocal textures.' },
+          { type: 'vista', title: 'Contrapeso Mixtape Teaser' }
+        ]
+      },
+      {
+        id: 5,
+        type: 'video',
+        category: 'rising',
+        user: '@tecuani',
+        avatar: 'https://picsum.photos/seed/tecuani_main/200',
+        time: '3 days ago',
+        caption: 'Live studio freestyle clip. Direct output session. 🔥🎙️',
+        videoBg: 'linear-gradient(135deg, #1e1b4b 0%, #311b92 100%)',
+        likes: '5,420',
+        comments: '412'
+      }
+    ];
+
+    /* ================= STORY DOCK ENGINE ================= */
     let currentStoryMode = 'creator';
     let storyTimer = null;
     let storyProgress = 0;
@@ -1334,13 +1375,97 @@
       currentStoryMode = mode;
       document.getElementById('btn-mode-creator').classList.toggle('active', mode === 'creator');
       document.getElementById('btn-mode-timeline').classList.toggle('active', mode === 'timeline');
-
-      document.getElementById('story-row-creator').style.display = mode === 'creator' ? 'flex' : 'none';
-      document.getElementById('story-row-timeline').style.display = mode === 'timeline' ? 'flex' : 'none';
+      renderStoryDrawerContent();
     }
 
     function toggleStoryDrawer(open) {
-      document.getElementById('story-drawer').classList.toggle('open', open);
+      const drawer = document.getElementById('story-drawer');
+      if(open) {
+        drawer.classList.add('open');
+        renderStoryDrawerContent();
+      } else {
+        drawer.classList.remove('open');
+      }
+    }
+
+    function renderStoryDrawerContent() {
+      const container = document.getElementById('drawer-content-area');
+      
+      if(currentStoryMode === 'creator') {
+        container.innerHTML = `
+          <div class="drawer-section-label">New Today</div>
+          <div class="drawer-scroll-row">
+            <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img"></div>
+              <span class="story-username">Alice</span>
+            </div>
+            <div class="story-avatar-item" onclick="openStoryViewer('Bob', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/bob/100" class="avatar-img"></div>
+              <span class="story-username">Bob</span>
+            </div>
+            <div class="story-avatar-item" onclick="openStoryViewer('Mia', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/mia/100" class="avatar-img"></div>
+              <span class="story-username">Mia</span>
+            </div>
+          </div>
+
+          <div class="drawer-section-label">Earlier Today</div>
+          <div class="drawer-scroll-row">
+            <div class="story-avatar-item" onclick="openStoryViewer('Carlos', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/carlos/100" class="avatar-img"></div>
+              <span class="story-username">Carlos</span>
+            </div>
+            <div class="story-avatar-item" onclick="openStoryViewer('Emma', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/emma/100" class="avatar-img"></div>
+              <span class="story-username">Emma</span>
+            </div>
+          </div>
+
+          <div class="drawer-section-label">Yesterday</div>
+          <div class="drawer-scroll-row">
+            <div class="story-avatar-item" onclick="openStoryViewer('Noah', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring seen"><img src="https://picsum.photos/seed/noah/100" class="avatar-img"></div>
+              <span class="story-username">Noah</span>
+            </div>
+            <div class="story-avatar-item" onclick="openStoryViewer('Ava', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring seen"><img src="https://picsum.photos/seed/ava/100" class="avatar-img"></div>
+              <span class="story-username">Ava</span>
+            </div>
+          </div>
+        `;
+      } else {
+        /* CHRONOLOGICAL TIMELINE MODE */
+        container.innerHTML = `
+          <div class="drawer-section-label">Chronological Event Timeline</div>
+          <div class="drawer-scroll-row" style="padding-top: 6px;">
+            <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img"></div>
+              <span class="story-username">Alice</span>
+              <span class="story-timestamp-sub">9:02 AM</span>
+            </div>
+            <div class="story-avatar-item" onclick="openStoryViewer('Bob', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/bob/100" class="avatar-img"></div>
+              <span class="story-username">Bob</span>
+              <span class="story-timestamp-sub">9:04 AM</span>
+            </div>
+            <div class="story-avatar-item" onclick="openStoryViewer('Carlos', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/carlos/100" class="avatar-img"></div>
+              <span class="story-username">Carlos</span>
+              <span class="story-timestamp-sub">9:06 AM</span>
+            </div>
+            <div class="story-avatar-item" onclick="openStoryViewer('Alice', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/alice/100" class="avatar-img"></div>
+              <span class="story-username">Alice</span>
+              <span class="story-timestamp-sub">9:12 AM</span>
+            </div>
+            <div class="story-avatar-item" onclick="openStoryViewer('Mia', 0); toggleStoryDrawer(false);">
+              <div class="avatar-ring"><img src="https://picsum.photos/seed/mia/100" class="avatar-img"></div>
+              <span class="story-username">Mia</span>
+              <span class="story-timestamp-sub">9:20 AM</span>
+            </div>
+          </div>
+        `;
+      }
     }
 
     function openStoryViewer(name, index = 0) {
@@ -1385,13 +1510,13 @@
 
     function stepStory() { closeStoryViewer(); }
 
-    /* ================= STORYBOARD MULTI-SLIDE NAVIGATION ================= */
+    /* ================= STORYBOARD SLIDER NAVIGATION ================= */
     const storyboardState = {};
     const storyboardTotal = {};
 
     function moveStoryboard(id, delta) {
       const current = storyboardState[id] || 0;
-      const total = storyboardTotal[id] || 4;
+      const total = storyboardTotal[id] || 3;
       let next = current + delta;
 
       if(next < 0) next = 0;
@@ -1407,95 +1532,10 @@
       dots.forEach((d, i) => d.classList.toggle('active', i === next));
     }
 
-    /* ================= MAIN DATA SEEDING FOR FEEDS ================= */
-    const postDatabase = [
-      {
-        id: 1,
-        type: 'storyboard',
-        category: 'trending',
-        user: '@kenji_explores',
-        avatar: 'https://picsum.photos/seed/tokyo/100',
-        time: '2 hours ago',
-        caption: 'Swipe through the Storyboard to check out my first day in Tokyo!',
-        likes: '1,420',
-        comments: '89',
-        slides: [
-          { type: 'text', content: 'First 24 hours wandering around Shibuya... 🇯🇵', bg: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' },
-          { type: 'image', url: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80', caption: 'Vinyl record café.' },
-          { type: 'vista', title: 'Tokyo Uncurated VLOG - Kenji' }
-        ]
-      },
-      {
-        id: 2,
-        type: 'image',
-        category: 'rising',
-        user: '@design_daily',
-        avatar: 'https://picsum.photos/seed/art/100',
-        time: '45 mins ago',
-        caption: 'Exploring organic 3D textures today.',
-        imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-        likes: '482',
-        comments: '12'
-      },
-      {
-        id: 3,
-        type: 'text',
-        category: 'new',
-        user: '@sara_crafts',
-        avatar: 'https://picsum.photos/seed/coffee/100',
-        time: '3 mins ago',
-        text: '"Decentralized web allows creativity to win again." 🌐✨',
-        likes: '14',
-        comments: '2'
-      }
-    ];
-
-    /* Profile Specific Posts database for @tecuani */
-    const tecuaniPosts = [
-      {
-        id: 101,
-        type: 'storyboard',
-        category: 'posts',
-        user: '@tecuani',
-        avatar: 'https://picsum.photos/seed/tecuani_main/200',
-        time: 'Yesterday',
-        caption: 'Unpacking the production concept for my upcoming mixtape series on LibreNet.',
-        likes: '3,210',
-        comments: '184',
-        slides: [
-          { type: 'text', content: 'Behind the Beat: Layering Analog Synths 🎧', bg: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)' },
-          { type: 'image', url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=800&q=80', caption: 'Tracking vocal textures.' },
-          { type: 'vista', title: 'Contrapeso Mixtape Teaser' }
-        ]
-      },
-      {
-        id: 102,
-        type: 'video',
-        category: 'beams',
-        user: '@tecuani',
-        avatar: 'https://picsum.photos/seed/tecuani_main/200',
-        time: '3 days ago',
-        caption: 'Live studio freestyle clip. Direct output session. 🔥🎙️',
-        videoBg: 'linear-gradient(135deg, #1e1b4b 0%, #311b92 100%)',
-        likes: '5,420',
-        comments: '412'
-      },
-      {
-        id: 103,
-        type: 'text',
-        category: 'posts',
-        user: '@tecuani',
-        avatar: 'https://picsum.photos/seed/tecuani_main/200',
-        time: '5 days ago',
-        text: 'Never compromise on creative autonomy. Build your own tools, own your media, stay independent.',
-        likes: '1,890',
-        comments: '94'
-      }
-    ];
-
-    function renderFeed(postsArray, containerId = 'feed-container') {
+    /* ================= RENDER FEED ENGINE ================= */
+    function renderFeed(postsArray, containerId = 'feed-container', append = false) {
       const container = document.getElementById(containerId);
-      container.innerHTML = '';
+      if(!append) container.innerHTML = '';
 
       postsArray.forEach(post => {
         const article = document.createElement('article');
@@ -1527,7 +1567,7 @@
             } else if(slide.type === 'vista') {
               return `<div class="slide-item ${active}">
                 <div class="vista-cta-card">
-                  <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Full Track & Video</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Full Travel Log</div>
                   <h3 style="font-size: 1.2rem; color: #fff;">${slide.title}</h3>
                   <button class="vista-btn" onclick="openVistaPlayer('${slide.title}')">▶ Watch on Vista</button>
                 </div>
@@ -1553,7 +1593,7 @@
 
         article.innerHTML = `
           <div class="post-header">
-            <div class="post-user">
+            <div class="post-user" onclick="openUserProfile('${post.user}')">
               <img src="${post.avatar}" class="post-user-img">
               <div>
                 <div class="post-username">${post.user}</div>
@@ -1570,104 +1610,118 @@
               <button class="action-icon-btn">🔄</button>
             </div>
           </div>
-          ${post.caption ? `<div class="post-caption-block"><strong>${post.user}</strong> ${post.caption}</div>` : ''}
+          ${post.caption ? `<div class="post-caption-block"><strong onclick="openUserProfile('${post.user}')" style="cursor:pointer;">${post.user}</strong> ${post.caption}</div>` : ''}
         `;
         container.appendChild(article);
       });
     }
 
-    /* ================= PROFILE TELEGRAM-STYLE AVATAR GALLERY ================= */
-    const tecuaniAvatars = [
-      'https://picsum.photos/seed/tecuani_main/200',
-      'https://picsum.photos/seed/tecuani_old1/200',
-      'https://picsum.photos/seed/tecuani_old2/200'
-    ];
-    let currentAvatarIdx = 0;
+    /* ================= DYNAMIC PROFILE ROUTER ================= */
+    function openUserProfile(handle) {
+      activeProfileHandle = handle;
+      const data = profilesDB[handle] || {
+        name: handle.replace('@', ''),
+        handle: handle,
+        avatar: `https://picsum.photos/seed/${handle}/200`,
+        posts: '12',
+        followers: '1.1K',
+        following: '98',
+        bio: 'Independent creator on Beacon LibreNet ecosystem.',
+        avatarsHistory: [`https://picsum.photos/seed/${handle}/200`],
+        stickers: ['🌐', '✨', '🔥', '🎙️']
+      };
 
-    function openAvatarExpansion() {
-      document.getElementById('avatar-modal').classList.add('active');
-      updateAvatarModal();
-    }
+      document.getElementById('prof-display-name').innerText = data.name;
+      document.getElementById('prof-handle').innerText = data.handle;
+      document.getElementById('current-hero-img').src = data.avatar;
+      document.getElementById('prof-stat-posts').innerText = data.posts;
+      document.getElementById('prof-stat-followers').innerText = data.followers;
+      document.getElementById('prof-stat-following').innerText = data.following;
+      document.getElementById('prof-bio').innerText = data.bio;
 
-    function closeAvatarExpansion() {
-      document.getElementById('avatar-modal').classList.remove('active');
-    }
-
-    function updateAvatarModal() {
-      document.getElementById('expanded-avatar-img').src = tecuaniAvatars[currentAvatarIdx];
-      document.getElementById('avatar-index-counter').innerText = `${currentAvatarIdx + 1} / ${tecuaniAvatars.length} Avatar History`;
-    }
-
-    function stepAvatar(delta) {
-      currentAvatarIdx = (currentAvatarIdx + delta + tecuaniAvatars.length) % tecuaniAvatars.length;
-      updateAvatarModal();
-    }
-
-    function deleteCurrentAvatar() {
-      if(tecuaniAvatars.length <= 1) {
-        alert("Cannot delete primary active profile photo.");
-        return;
-      }
-      tecuaniAvatars.splice(currentAvatarIdx, 1);
-      currentAvatarIdx = 0;
-      document.getElementById('current-hero-img').src = tecuaniAvatars[0];
-      updateAvatarModal();
-    }
-
-    /* ================= PROFILE MODALS & INTERACTION ================= */
-    function toggleFollow(btn) {
-      if(btn.classList.contains('following')) {
-        btn.classList.remove('following');
-        btn.innerText = 'Follow';
-      } else {
-        btn.classList.add('following');
-        btn.innerText = 'Following';
-      }
-    }
-
-    function openSparksModal() { document.getElementById('sparks-modal').classList.add('active'); }
-    function closeSparksModal() { document.getElementById('sparks-modal').classList.remove('active'); }
-    function sendSparks(amt) {
-      alert(`Successfully sent ${amt} Sparks ⚡ to @tecuani!`);
-      closeSparksModal();
-    }
-
-    function openMsgRequestModal() { document.getElementById('msg-request-modal').classList.add('active'); }
-    function closeMsgRequestModal() { document.getElementById('msg-request-modal').classList.remove('active'); }
-    function submitMsgRequest() {
-      alert("Message request sent! Direct messaging will unlock once approved.");
-      closeMsgRequestModal();
+      switchMainTab('profile');
+      switchProfileTab('posts', document.querySelector('.prof-tab-btn'));
     }
 
     function switchProfileTab(tab, btn) {
       document.querySelectorAll('.prof-tab-btn').forEach(b => b.classList.remove('active'));
       if(btn) btn.classList.add('active');
 
-      const profContainer = document.getElementById('profile-feed-container');
+      const userPosts = postDatabase.filter(p => p.user === activeProfileHandle);
 
       if(tab === 'posts') {
-        renderFeed(tecuaniPosts, 'profile-feed-container');
+        renderFeed(userPosts.length ? userPosts : postDatabase.slice(0,2), 'profile-feed-container');
       } else if(tab === 'beams') {
-        const beams = tecuaniPosts.filter(p => p.type === 'video');
-        renderFeed(beams, 'profile-feed-container');
+        const beams = userPosts.filter(p => p.type === 'video');
+        renderFeed(beams.length ? beams : [postDatabase[4]], 'profile-feed-container');
       } else if(tab === 'storyboards') {
-        const sbs = tecuaniPosts.filter(p => p.type === 'storyboard');
-        renderFeed(sbs, 'profile-feed-container');
+        const sbs = userPosts.filter(p => p.type === 'storyboard');
+        renderFeed(sbs.length ? sbs : [postDatabase[0]], 'profile-feed-container');
       } else if(tab === 'stickers') {
-        profContainer.innerHTML = `
+        const profData = profilesDB[activeProfileHandle] || { stickers: ['🌐', '✨', '🔥'] };
+        document.getElementById('profile-feed-container').innerHTML = `
           <div class="stickers-grid">
-            <div class="sticker-item">⚡<span class="sticker-name">Spark Energy</span></div>
-            <div class="sticker-item">🎙️<span class="sticker-name">Mic Check</span></div>
-            <div class="sticker-item">🌐<span class="sticker-name">LibreNet</span></div>
-            <div class="sticker-item">🔥<span class="sticker-name">Flame</span></div>
-            <div class="sticker-item">🎹<span class="sticker-name">Analog Synth</span></div>
-            <div class="sticker-item">🔒<span class="sticker-name">Encrypted</span></div>
+            ${profData.stickers.map(s => `<div class="sticker-item">${s}<span class="sticker-name">Pack Item</span></div>`).join('')}
           </div>
         `;
       }
     }
 
-    /* ================= MAIN TAB SWITCHING ================= */
+    /* ================= INFINITE SCROLL AUTOMATION ================= */
+    let isLoadingMore = false;
+    window.addEventListener('scroll', () => {
+      const feedVisible = document.getElementById('feed-container').style.display !== 'none';
+      if(!feedVisible || isLoadingMore) return;
+
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
+        isLoadingMore = true;
+        document.getElementById('infinite-scroll-indicator').style.display = 'block';
+
+        setTimeout(() => {
+          const clonePosts = [...postDatabase].map(p => ({ ...p, id: p.id + Math.floor(Math.random() * 1000) }));
+          renderFeed(clonePosts, 'feed-container', true);
+          
+          if(document.getElementById('nav-discover').classList.contains('active')) {
+            document.querySelectorAll('.disc-only-label').forEach(lbl => lbl.style.display = 'inline-block');
+          }
+          
+          isLoadingMore = false;
+          document.getElementById('infinite-scroll-indicator').style.display = 'none';
+        }, 500);
+      }
+    });
+
+    /* ================= AVATAR MODAL ================= */
+    function openAvatarExpansion() {
+      const data = profilesDB[activeProfileHandle];
+      currentAvatarIdx = 0;
+      document.getElementById('avatar-modal').classList.add('active');
+      updateAvatarModal(data);
+    }
+
+    function closeAvatarExpansion() {
+      document.getElementById('avatar-modal').classList.remove('active');
+    }
+
+    function updateAvatarModal(data) {
+      const history = data ? data.avatarsHistory : [`https://picsum.photos/seed/${activeProfileHandle}/200`];
+      document.getElementById('expanded-avatar-img').src = history[currentAvatarIdx] || history[0];
+      document.getElementById('avatar-index-counter').innerText = `${currentAvatarIdx + 1} / ${history.length} Avatar History`;
+    }
+
+    function stepAvatar(delta) {
+      const data = profilesDB[activeProfileHandle];
+      const history = data ? data.avatarsHistory : [1];
+      currentAvatarIdx = (currentAvatarIdx + delta + history.length) % history.length;
+      updateAvatarModal(data);
+    }
+
+    function deleteCurrentAvatar() {
+      alert("Avatar removed from archive.");
+      closeAvatarExpansion();
+    }
+
+    /* ================= MAIN TAB ROUTER ================= */
     function switchMainTab(tab) {
       const navHome = document.getElementById('nav-home');
       const navDisc = document.getElementById('nav-discover');
@@ -1681,8 +1735,8 @@
       const storyDock = document.getElementById('main-story-dock');
       const discSubtabs = document.getElementById('discover-subtabs');
       const discLabels = document.querySelectorAll('.disc-only-label');
+      const scrollIndicator = document.getElementById('infinite-scroll-indicator');
 
-      // Reset Active Class
       [navHome, navDisc, navProf].forEach(n => n && n.classList.remove('active'));
       [deskNavHome, deskNavDisc, deskNavProf].forEach(n => n && n.classList.remove('active'));
 
@@ -1694,6 +1748,7 @@
         profView.classList.remove('active');
         storyDock.style.display = 'block';
         discSubtabs.style.display = 'none';
+        scrollIndicator.style.display = 'none';
         discLabels.forEach(lbl => lbl.style.display = 'none');
         showAllPosts();
       } else if(tab === 'discover') {
@@ -1704,6 +1759,7 @@
         profView.classList.remove('active');
         storyDock.style.display = 'block';
         discSubtabs.style.display = 'flex';
+        scrollIndicator.style.display = 'none';
         discLabels.forEach(lbl => lbl.style.display = 'inline-block');
         filterDiscover('trending', document.querySelector('.disc-tab-btn'));
       } else if(tab === 'profile') {
@@ -1713,8 +1769,8 @@
         mainFeed.style.display = 'none';
         storyDock.style.display = 'none';
         discSubtabs.style.display = 'none';
+        scrollIndicator.style.display = 'none';
         profView.classList.add('active');
-        switchProfileTab('posts', document.querySelector('.prof-tab-btn'));
       }
     }
 
@@ -1734,6 +1790,25 @@
 
     function showAllPosts() {
       document.querySelectorAll('#feed-container .post-card').forEach(p => p.style.display = 'block');
+    }
+
+    function toggleFollow(btn) {
+      btn.classList.toggle('following');
+      btn.innerText = btn.classList.contains('following') ? 'Following' : 'Follow';
+    }
+
+    function openSparksModal() { document.getElementById('sparks-modal').classList.add('active'); }
+    function closeSparksModal() { document.getElementById('sparks-modal').classList.remove('active'); }
+    function sendSparks(amt) {
+      alert(`Sent ${amt} Sparks ⚡ to ${activeProfileHandle}!`);
+      closeSparksModal();
+    }
+
+    function openMsgRequestModal() { document.getElementById('msg-request-modal').classList.add('active'); }
+    function closeMsgRequestModal() { document.getElementById('msg-request-modal').classList.remove('active'); }
+    function submitMsgRequest() {
+      alert("Direct message request submitted successfully.");
+      closeMsgRequestModal();
     }
 
     function openVistaPlayer(title) {
